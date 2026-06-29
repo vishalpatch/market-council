@@ -1,3 +1,4 @@
+import Link from "next/link";
 import Header from "@/components/Header";
 import { SITE_TAGLINE, SITE_DESCRIPTION } from "@/lib/constants";
 
@@ -50,12 +51,18 @@ export default function Home() {
             className="flex flex-col sm:flex-row items-center justify-center gap-4"
             id="get-started"
           >
-            <button className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 transition-colors text-base">
-              Request Access
-            </button>
-            <button className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-zinc-700 text-zinc-300 font-semibold hover:border-zinc-500 hover:text-zinc-50 transition-colors text-base">
-              Watch Demo
-            </button>
+            <Link
+              href="/signup"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 transition-colors text-base text-center"
+            >
+              Get Started
+            </Link>
+            <Link
+              href="/login"
+              className="w-full sm:w-auto px-8 py-3.5 rounded-xl border border-zinc-700 text-zinc-300 font-semibold hover:border-zinc-500 hover:text-zinc-50 transition-colors text-base text-center"
+            >
+              Sign In
+            </Link>
           </div>
         </div>
       </section>
