@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Link from "next/link";
 import { createBrowserClient } from "@supabase/ssr";
 
@@ -21,10 +21,19 @@ export default function SignupPage() {
     []
   );
 
+  useEffect(() => {
+    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
+    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
+    console.log("[market-council] NEXT_PUBLIC_SUPABASE_URL:", url ? `${url.slice(0, 20)}…` : "UNDEFINED");
+    console.log("[market-council] NEXT_PUBLIC_SUPABASE_ANON_KEY:", key ? `${key.slice(0, 10)}…` : "UNDEFINED");
+  }, []);
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
+
+    console.log("[market-council] attempting signUp for:", email);
 
     const { error } = await supabase.auth.signUp({
       email,
@@ -35,10 +44,18 @@ export default function SignupPage() {
     });
 
     if (error) {
+      console.error("[market-council] signUp error:", {
+        message: error.message,
+        status: error.status,
+        name: error.name,
+        full: JSON.stringify(error),
+      });
       setError(error.message);
       setLoading(false);
       return;
     }
+
+    console.log("[market-council] signUp succeeded");
 
     setSuccess(true);
     setLoading(false);
