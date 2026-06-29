@@ -1,8 +1,8 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import Link from "next/link";
-import { createClient } from "@/lib/supabase/client";
+import { createBrowserClient } from "@supabase/ssr";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -12,12 +12,20 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
+  const supabase = useMemo(
+    () =>
+      createBrowserClient(
+        process.env.NEXT_PUBLIC_SUPABASE_URL!,
+        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      ),
+    []
+  );
+
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const supabase = createClient();
     const { error } = await supabase.auth.signUp({
       email,
       password,
@@ -53,10 +61,14 @@ export default function SignupPage() {
           </div>
           <h2 className="text-2xl font-bold mb-2">Check your email</h2>
           <p className="text-zinc-400 text-sm mb-6">
-            We sent a confirmation link to <span className="text-zinc-200">{email}</span>.
-            Click it to activate your account.
+            We sent a confirmation link to{" "}
+            <span className="text-zinc-200">{email}</span>. Click it to
+            activate your account.
           </p>
-          <Link href="/login" className="text-emerald-400 hover:text-emerald-300 text-sm transition-colors">
+          <Link
+            href="/login"
+            className="text-emerald-400 hover:text-emerald-300 text-sm transition-colors"
+          >
             Back to sign in →
           </Link>
         </div>
