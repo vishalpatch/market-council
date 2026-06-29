@@ -14,7 +14,7 @@ export async function GET(
       getCompanyNews(symbol),
     ]);
 
-    return NextResponse.json({ quote, profile, news: news.slice(0, 3) });
+    return NextResponse.json({ quote, profile, news: news.slice(0, 8) });
   } catch (err) {
     const message = err instanceof Error ? err.message : "Unknown error";
     const status = message.includes("not found") ? 404 : 500;
