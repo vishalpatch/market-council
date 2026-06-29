@@ -1,0 +1,87 @@
+const BASE = "https://finnhub.io/api/v1";
+
+function key() {
+  const k = process.env.FINNHUB_API_KEY;
+  if (!k) throw new Error("FINNHUB_API_KEY is not set");
+  return k;
+}
+
+export interface Quote {
+  price: number;
+  change: number;
+  percentChange: number;
+  high: number;
+  low: number;
+  prevClose: number;
+}
+
+export interface CompanyProfile {
+  name: string;
+  ticker: string;
+  logo: string;
+  industry: string;
+  marketCap: number;
+  exchange: string;
+  currency: string;
+  weburl: string;
+}
+
+export interface NewsItem {
+  headline: string;
+  summary: string;
+  url: string;
+  datetime: number;
+  source: string;
+  image: string;
+}
+
+export async function getQuote(symbol: string): Promise<Quote> {
+  const res = await fetch(
+    `${BASE}/quote?symbol=${encodeURIComponent(symbol)}&token=${key()}`,
+    { next: { revalidate: 60 } }
+  );
+  if (!res.ok) throw new Error(`Quote fetch failed (${res.status})`);
+  const d = await res.json();
+  if (d.c === 0 && d.pc === 0) throw new Error(`Symbol not found: ${symbol}`);
+  return {
+    price: d.c,
+    change: d.d,
+    percentChange: d.dp,
+    high: d.h,
+    low: d.l,
+    prevClose: d.pc,
+  };
+}
+
+export async function getCompanyProfile(symbol: string): Promise<CompanyProfile> {
+  const res = await fetch(
+    `${BASE}/stock/profile2?symbol=${encodeURIComponent(symbol)}&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`Profile fetch failed (${res.status})`);
+  const d = await res.json();
+  if (!d.name) throw new Error(`Symbol not found: ${symbol}`);
+  return {
+    name: d.name,
+    ticker: d.ticker,
+    logo: d.logo,
+    industry: d.finnhubIndustry,
+    marketCap: d.marketCapitalization,
+    exchange: d.exchange,
+    currency: d.currency,
+    weburl: d.weburl,
+  };
+}
+
+export async function getCompanyNews(symbol: string): Promise<NewsItem[]> {
+  const to = new Date().toISOString().slice(0, 10);
+  const from = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000)
+    .toISOString()
+    .slice(0, 10);
+  const res = await fetch(
+    `${BASE}/company-news?symbol=${encodeURIComponent(symbol)}&from=${from}&to=${to}&token=${key()}`,
+    { next: { revalidate: 1800 } }
+  );
+  if (!res.ok) throw new Error(`News fetch failed (${res.status})`);
+  return res.json();
+}

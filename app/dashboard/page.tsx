@@ -1,6 +1,7 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
+import StockSearch from "@/components/StockSearch";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -78,6 +79,16 @@ export default async function DashboardPage() {
               <p className="text-xs text-zinc-500">{stat.delta}</p>
             </div>
           ))}
+        </div>
+
+        {/* Stock lookup */}
+        <div className="mb-12">
+          <p className="text-emerald-400 text-sm font-medium mb-2">Market Data</p>
+          <h2 className="text-2xl font-bold tracking-tight mb-1">Stock Lookup</h2>
+          <p className="text-zinc-400 text-sm mb-6">
+            Enter any ticker to see real-time price, financials, and latest news.
+          </p>
+          <StockSearch />
         </div>
 
         {/* Submit thesis CTA */}
