@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { signOut } from "@/app/auth/actions";
@@ -38,6 +39,12 @@ export default async function DashboardPage() {
 
           <div className="flex items-center gap-4">
             <span className="text-sm text-zinc-400 hidden sm:block">{user.email}</span>
+            <Link
+              href="/dashboard/committee"
+              className="px-4 py-1.5 rounded-full bg-[#00dc82] text-black text-sm font-semibold hover:bg-[#00dc82]/90 transition-colors"
+            >
+              Committee
+            </Link>
             <form action={signOut}>
               <button
                 type="submit"
@@ -103,13 +110,16 @@ export default async function DashboardPage() {
               />
             </svg>
           </div>
-          <h2 className="text-lg font-semibold mb-2">Submit your first thesis</h2>
+          <h2 className="text-lg font-semibold mb-2">Convene the AI Investment Committee</h2>
           <p className="text-zinc-400 text-sm mb-6 max-w-sm mx-auto">
-            Describe an investment idea or enter a ticker. The council will research and debate it.
+            Describe an investment idea or enter a ticker. Five specialized AI analysts debate it and a Chairman delivers a verdict.
           </p>
-          <button className="px-6 py-2.5 rounded-xl bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 transition-colors text-sm">
+          <Link
+            href="/dashboard/committee"
+            className="inline-block px-6 py-2.5 rounded-xl bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 transition-colors text-sm"
+          >
             New Analysis
-          </button>
+          </Link>
         </div>
       </main>
     </div>

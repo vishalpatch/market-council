@@ -1,0 +1,312 @@
+"use client";
+
+import { useCallback, useEffect, useState } from "react";
+import { createClient } from "@/lib/supabase/client";
+import type { CommitteeResult } from "@/lib/committee-types";
+import PersonaCard from "./PersonaCard";
+import VerdictBadge from "./VerdictBadge";
+
+interface SavedAnalysis {
+  id: string;
+  thesis: string;
+  result: CommitteeResult;
+  created_at: string;
+}
+
+export default function CommitteeClient({ userId }: { userId: string }) {
+  const [input, setInput] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [result, setResult] = useState<CommitteeResult | null>(null);
+  const [thesis, setThesis] = useState("");
+
+  const [saving, setSaving] = useState(false);
+  const [saved, setSaved] = useState(false);
+  const [history, setHistory] = useState<SavedAnalysis[]>([]);
+  const [historyError, setHistoryError] = useState("");
+
+  const supabase = createClient();
+
+  const loadHistory = useCallback(async () => {
+    const { data, error } = await supabase
+      .from("committee_analyses")
+      .select("id, thesis, result, created_at")
+      .order("created_at", { ascending: false })
+      .limit(10);
+    if (error) {
+      setHistoryError(error.message);
+      return;
+    }
+    setHistory((data as SavedAnalysis[]) ?? []);
+  }, [supabase]);
+
+  useEffect(() => {
+    loadHistory();
+  }, [loadHistory]);
+
+  async function handleSubmit(e: React.FormEvent) {
+    e.preventDefault();
+    const value = input.trim();
+    if (!value) return;
+
+    setLoading(true);
+    setError("");
+    setResult(null);
+    setSaved(false);
+
+    try {
+      const res = await fetch("/api/committee", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ input: value }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error ?? "The committee could not convene.");
+        return;
+      }
+      setResult(json as CommitteeResult);
+      setThesis(value);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  async function handleSave() {
+    if (!result) return;
+    setSaving(true);
+    setHistoryError("");
+    const { error } = await supabase.from("committee_analyses").insert({
+      user_id: userId,
+      thesis,
+      result,
+    });
+    setSaving(false);
+    if (error) {
+      setHistoryError(error.message);
+      return;
+    }
+    setSaved(true);
+    loadHistory();
+  }
+
+  function openSaved(a: SavedAnalysis) {
+    setResult(a.result);
+    setThesis(a.thesis);
+    setSaved(true);
+    setError("");
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+
+  return (
+    <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
+      <div>
+        {/* Input */}
+        <form onSubmit={handleSubmit} className="mb-8">
+          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-2 backdrop-blur-xl">
+            <textarea
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key === "Enter" && !e.shiftKey) {
+                  e.preventDefault();
+                  handleSubmit(e);
+                }
+              }}
+              rows={3}
+              placeholder='Enter a ticker (e.g. NVDA) or a thesis (e.g. "I think Apple is overvalued because of China risk")…'
+              className="w-full resize-none bg-transparent px-4 py-3 text-sm text-zinc-50 placeholder-zinc-600 focus:outline-none"
+            />
+            <div className="flex items-center justify-between px-2 pb-1">
+              <span className="text-[11px] text-zinc-600">
+                Enter to convene · Shift+Enter for a new line
+              </span>
+              <button
+                type="submit"
+                disabled={loading || !input.trim()}
+                className="rounded-xl bg-[#00dc82] px-5 py-2.5 text-sm font-semibold text-black transition-all hover:bg-[#00dc82]/90 hover:shadow-[0_0_24px_-4px_#00dc82] disabled:cursor-not-allowed disabled:opacity-40"
+              >
+                {loading ? "Convening…" : "Convene Committee"}
+              </button>
+            </div>
+          </div>
+        </form>
+
+        {error && (
+          <div className="mb-6 rounded-2xl border border-[#ff5470]/30 bg-[#ff5470]/10 px-5 py-4 text-sm text-[#ff5470]">
+            {error}
+          </div>
+        )}
+
+        {loading && <ConveningState />}
+
+        {result && !loading && (
+          <div className="space-y-6">
+            {/* Thesis */}
+            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl">
+              <p className="mb-1 text-xs uppercase tracking-wider text-zinc-500">
+                Thesis under review
+              </p>
+              <p className="text-zinc-200">{result.thesisSummary}</p>
+            </div>
+
+            {/* Personas */}
+            <div>
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
+                The Committee
+              </h3>
+              <div className="grid gap-4 md:grid-cols-2">
+                {result.personas.map((p, i) => (
+                  <PersonaCard key={`${p.name}-${i}`} persona={p} />
+                ))}
+              </div>
+            </div>
+
+            {/* Chairman */}
+            <ChairmanCard result={result} />
+
+            {/* Save */}
+            <div className="flex items-center gap-3">
+              <button
+                onClick={handleSave}
+                disabled={saving || saved}
+                className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-white/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+              >
+                {saved ? "✓ Saved" : saving ? "Saving…" : "Save Analysis"}
+              </button>
+              {historyError && (
+                <span className="text-xs text-[#ff5470]">{historyError}</span>
+              )}
+            </div>
+            <p className="text-[11px] text-zinc-600">
+              For educational and informational purposes only — not financial advice.
+            </p>
+          </div>
+        )}
+      </div>
+
+      {/* History sidebar */}
+      <aside>
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
+          Past Analyses
+        </h3>
+        {history.length === 0 ? (
+          <p className="text-sm text-zinc-600">
+            No saved analyses yet. Convene a committee and save the verdict.
+          </p>
+        ) : (
+          <div className="space-y-2">
+            {history.map((a) => (
+              <button
+                key={a.id}
+                onClick={() => openSaved(a)}
+                className="block w-full rounded-xl border border-white/[0.08] bg-white/[0.02] p-3 text-left backdrop-blur-xl transition-colors hover:border-white/[0.16]"
+              >
+                <div className="mb-1 flex items-center justify-between gap-2">
+                  <VerdictBadge verdict={a.result.chairman.verdict} size="sm" />
+                  <span className="font-mono text-xs text-zinc-500">
+                    {a.result.chairman.overallScore}/100
+                  </span>
+                </div>
+                <p className="line-clamp-2 text-xs text-zinc-300">{a.thesis}</p>
+                <p className="mt-1 text-[10px] text-zinc-600">
+                  {new Date(a.created_at).toLocaleString()}
+                </p>
+              </button>
+            ))}
+          </div>
+        )}
+      </aside>
+    </div>
+  );
+}
+
+function ChairmanCard({ result }: { result: CommitteeResult }) {
+  const { chairman } = result;
+  const accent =
+    chairman.verdict === "BULLISH"
+      ? "#00dc82"
+      : chairman.verdict === "BEARISH"
+        ? "#ff5470"
+        : "#a1a1aa";
+  return (
+    <div
+      className="rounded-2xl border bg-white/[0.02] p-6 backdrop-blur-xl"
+      style={{ borderColor: `${accent}40` }}
+    >
+      <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] text-xl">
+            ⚖️
+          </div>
+          <div>
+            <h3 className="font-semibold text-zinc-50">The Chairman</h3>
+            <p className="text-xs text-zinc-500">Final Synthesis</p>
+          </div>
+        </div>
+        <VerdictBadge verdict={chairman.verdict} />
+      </div>
+
+      {/* Score */}
+      <div className="mb-4">
+        <div className="mb-1 flex items-center justify-between text-xs text-zinc-500">
+          <span>Overall Conviction</span>
+          <span className="font-mono" style={{ color: accent }}>
+            {chairman.overallScore}/100
+          </span>
+        </div>
+        <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+          <div
+            className="h-full rounded-full transition-all"
+            style={{ width: `${chairman.overallScore}%`, backgroundColor: accent }}
+          />
+        </div>
+      </div>
+
+      <p className="mb-3 text-sm leading-relaxed text-zinc-300">{chairman.summary}</p>
+
+      <div className="rounded-xl border border-white/[0.08] bg-black/30 p-4">
+        <p className="mb-1 text-[11px] uppercase tracking-wider text-zinc-500">
+          Recommendation
+        </p>
+        <p className="font-medium" style={{ color: accent }}>
+          {chairman.recommendation}
+        </p>
+      </div>
+    </div>
+  );
+}
+
+function ConveningState() {
+  const members = [
+    "Value Analyst",
+    "Momentum Trader",
+    "Risk Manager",
+    "Contrarian",
+    "Macro Economist",
+  ];
+  return (
+    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-10 text-center backdrop-blur-xl">
+      <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center">
+        <span className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-[#00dc82]" />
+      </div>
+      <p className="mb-1 font-medium text-zinc-200">Convening the committee…</p>
+      <p className="text-sm text-zinc-500">
+        Five analysts are debating your thesis.
+      </p>
+      <div className="mt-5 flex flex-wrap justify-center gap-2">
+        {members.map((m, i) => (
+          <span
+            key={m}
+            className="animate-pulse rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-zinc-400"
+            style={{ animationDelay: `${i * 150}ms` }}
+          >
+            {m}
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
