@@ -51,8 +51,8 @@ export default function WatchlistSection({ userId }: { userId: string }) {
             i.ticker,
             {
               name: json.profile?.name ?? i.ticker,
-              price: json.quote?.c ?? 0,
-              changePercent: json.quote?.dp ?? 0,
+              price: json.quote?.price ?? 0,
+              changePercent: json.quote?.percentChange ?? 0,
             },
           ] as const;
         } catch {
