@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AppShell from "@/components/AppShell";
+import { isAdminEmail } from "@/lib/is-admin";
 
 export default async function AdminPage() {
   const supabase = await createClient();
@@ -10,9 +11,7 @@ export default async function AdminPage() {
   } = await supabase.auth.getUser();
 
   if (!user) redirect("/login");
-
-  const adminEmail = process.env.ADMIN_EMAIL;
-  if (!adminEmail || user.email !== adminEmail) redirect("/dashboard");
+  if (!isAdminEmail(user.email)) redirect("/dashboard");
 
   const adminClient = createAdminClient();
 
@@ -26,7 +25,7 @@ export default async function AdminPage() {
   const users = usersData?.users ?? [];
 
   return (
-    <AppShell active="admin" isAdmin>
+    <AppShell active="admin" userEmail={user.email}>
       <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
         <header className="mb-16 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">
@@ -45,7 +44,7 @@ export default async function AdminPage() {
           {[
             { label: "Total Users", value: users.length.toLocaleString(), sub: "registered accounts" },
             { label: "Committee Analyses", value: (analysesCount ?? 0).toLocaleString(), sub: "total analyses run" },
-            { label: "Admin", value: adminEmail, sub: "current account" },
+            { label: "Admin", value: user.email ?? "—", sub: "current account" },
           ].map((s) => (
             <div key={s.label} className="border-t border-hairline pt-6 sm:pr-8">
               <p className="text-xs uppercase tracking-[0.15em] text-faint">{s.label}</p>

@@ -5,6 +5,7 @@ import {
   getCompanyNews,
   getCompanyProfile,
   getBasicFinancials,
+  getMarketNews,
 } from "@/lib/finnhub";
 
 export const runtime = "nodejs";
@@ -41,21 +42,34 @@ export async function GET() {
       return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
     }
 
-    const indices = await Promise.all(
-      INDICES.map(async (i) => {
-        try {
-          const q = await getQuote(i.symbol);
-          return {
-            ...i,
-            price: q.price,
-            change: q.change,
-            percentChange: q.percentChange,
-          };
-        } catch {
-          return { ...i, price: null, change: null, percentChange: null };
-        }
-      })
-    );
+    const [indices, topStories] = await Promise.all([
+      Promise.all(
+        INDICES.map(async (i) => {
+          try {
+            const q = await getQuote(i.symbol);
+            return {
+              ...i,
+              price: q.price,
+              change: q.change,
+              percentChange: q.percentChange,
+            };
+          } catch {
+            return { ...i, price: null, change: null, percentChange: null };
+          }
+        })
+      ),
+      getMarketNews("general")
+        .then((news) =>
+          news.slice(0, 8).map((n) => ({
+            headline: n.headline,
+            url: n.url,
+            source: n.source,
+            datetime: n.datetime,
+            image: n.image,
+          }))
+        )
+        .catch(() => []),
+    ]);
 
     const { data: wl } = await supabase
       .from("watchlist_items")
@@ -120,7 +134,7 @@ export async function GET() {
       .filter((x): x is DigestItem => x !== null)
       .sort((a, b) => b.score - a.score);
 
-    return NextResponse.json({ indices, feed, watchlistCount: tickers.length });
+    return NextResponse.json({ indices, topStories, feed, watchlistCount: tickers.length });
   } catch (err) {
     console.error("[digest] error:", err);
     const message = err instanceof Error ? err.message : "Unknown error";

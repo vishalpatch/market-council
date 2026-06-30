@@ -11,10 +11,9 @@ export default async function StressTestPage() {
 
   if (!user) redirect("/login");
 
-  const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
 
   return (
-    <AppShell active="stress-test" isAdmin={isAdmin}>
+    <AppShell active="stress-test" userEmail={user.email}>
       <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
         <header className="mb-16 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">

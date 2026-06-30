@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Bar,
   BarChart,
@@ -173,12 +173,9 @@ export default function StressTestClient({ userId }: { userId: string }) {
           <div className="space-y-3">
             {rows.map((r, i) => (
               <div key={i} className="flex items-center gap-3">
-                <input
+                <TickerInput
                   value={r.ticker}
-                  onChange={(e) => updateRow(i, { ticker: e.target.value.toUpperCase() })}
-                  placeholder="Ticker"
-                  maxLength={10}
-                  className={`${inputCls} w-32 font-mono`}
+                  onChange={(v) => updateRow(i, { ticker: v })}
                 />
                 <div className="relative w-32">
                   <input
@@ -421,6 +418,87 @@ function SectionHeading({ title, note }: { title: string; note: string }) {
     <div className="mb-8 flex items-baseline justify-between border-b border-hairline pb-4">
       <h2 className="font-serif text-2xl font-light tracking-editorial">{title}</h2>
       <p className="text-xs uppercase tracking-[0.15em] text-faint">{note}</p>
+    </div>
+  );
+}
+
+interface Suggestion {
+  symbol: string;
+  description: string;
+}
+
+function TickerInput({
+  value,
+  onChange,
+}: {
+  value: string;
+  onChange: (v: string) => void;
+}) {
+  const [results, setResults] = useState<Suggestion[]>([]);
+  const [open, setOpen] = useState(false);
+  const boxRef = useRef<HTMLDivElement>(null);
+
+  // Fetch suggestions (debounced) once 3+ characters are typed.
+  useEffect(() => {
+    const q = value.trim();
+    if (q.length < 3) {
+      setResults([]);
+      return;
+    }
+    const id = setTimeout(async () => {
+      try {
+        const res = await fetch(`/api/symbol-search?q=${encodeURIComponent(q)}`);
+        const json = await res.json();
+        setResults(json.results ?? []);
+        setOpen(true);
+      } catch {
+        setResults([]);
+      }
+    }, 250);
+    return () => clearTimeout(id);
+  }, [value]);
+
+  // Close on outside click.
+  useEffect(() => {
+    function onDoc(e: MouseEvent) {
+      if (boxRef.current && !boxRef.current.contains(e.target as Node)) setOpen(false);
+    }
+    document.addEventListener("mousedown", onDoc);
+    return () => document.removeEventListener("mousedown", onDoc);
+  }, []);
+
+  return (
+    <div ref={boxRef} className="relative w-32">
+      <input
+        value={value}
+        onChange={(e) => onChange(e.target.value.toUpperCase())}
+        onFocus={() => results.length > 0 && setOpen(true)}
+        placeholder="Ticker"
+        maxLength={10}
+        className={`${inputCls} w-full font-mono`}
+      />
+      {open && results.length > 0 && (
+        <ul className="absolute left-0 top-full z-30 mt-1 max-h-64 w-72 overflow-auto rounded-xl border border-hairline-strong bg-ink-raised py-1 shadow-xl">
+          {results.map((r) => (
+            <li key={r.symbol}>
+              <button
+                type="button"
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  onChange(r.symbol);
+                  setOpen(false);
+                }}
+                className="flex w-full items-center gap-2 px-3 py-2 text-left transition-colors hover:bg-paper/[0.05]"
+              >
+                <span className="font-mono text-sm font-semibold text-paper">
+                  {r.symbol}
+                </span>
+                <span className="truncate text-xs text-muted">{r.description}</span>
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
     </div>
   );
 }

@@ -33,8 +33,17 @@ interface FeedItem {
   flags: string[];
 }
 
+interface TopStory {
+  headline: string;
+  url: string;
+  source: string;
+  datetime: number;
+  image: string;
+}
+
 interface ApiResp {
   indices: IndexCard[];
+  topStories: TopStory[];
   feed: FeedItem[];
   watchlistCount: number;
   error?: string;
@@ -122,10 +131,52 @@ export default function DigestClient() {
         </div>
       </section>
 
-      {/* Prioritized feed */}
+      {/* Top stories — market-wide */}
+      {data.topStories.length > 0 && (
+        <section>
+          <h2 className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-faint">
+            Top Stories
+          </h2>
+          <div className="space-y-3">
+            {data.topStories.map((s, i) => (
+              <a
+                key={i}
+                href={s.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="group flex gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-gold/40"
+              >
+                {s.image && (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={s.image}
+                    alt=""
+                    className="hidden h-16 w-24 shrink-0 rounded-lg object-cover sm:block"
+                    onError={(e) => {
+                      (e.currentTarget as HTMLImageElement).style.display = "none";
+                    }}
+                  />
+                )}
+                <div className="min-w-0 flex-1">
+                  <div className="mb-1 flex items-center gap-2 text-xs text-faint">
+                    <span className="font-medium text-gold">{s.source}</span>
+                    <span>·</span>
+                    <span>{formatRelativeDate(s.datetime)}</span>
+                  </div>
+                  <h3 className="font-medium leading-snug text-zinc-100 transition-colors group-hover:text-gold">
+                    {s.headline}
+                  </h3>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      {/* Prioritized watchlist feed */}
       <section>
         <h2 className="mb-6 text-xs font-semibold uppercase tracking-[0.2em] text-faint">
-          Needs Your Attention
+          Your Watchlist
         </h2>
 
         {data.watchlistCount === 0 ? (

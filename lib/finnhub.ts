@@ -150,6 +150,45 @@ export async function getIpoCalendar(from: string, to: string): Promise<IpoEvent
   return (d.ipoCalendar ?? []) as IpoEvent[];
 }
 
+export interface SymbolMatch {
+  symbol: string;
+  description: string;
+  displaySymbol: string;
+  type: string;
+}
+
+/** Symbol/company search for autocomplete (free tier). */
+export async function searchSymbols(q: string): Promise<SymbolMatch[]> {
+  const res = await fetch(
+    `${BASE}/search?q=${encodeURIComponent(q)}&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`Symbol search failed (${res.status})`);
+  const d = await res.json();
+  return (d.result ?? []) as SymbolMatch[];
+}
+
+export interface MarketNewsItem {
+  id: number;
+  headline: string;
+  summary: string;
+  url: string;
+  datetime: number;
+  source: string;
+  image: string;
+  category: string;
+}
+
+/** General market news feed (free tier). */
+export async function getMarketNews(category = "general"): Promise<MarketNewsItem[]> {
+  const res = await fetch(
+    `${BASE}/news?category=${encodeURIComponent(category)}&token=${key()}`,
+    { next: { revalidate: 900 } }
+  );
+  if (!res.ok) throw new Error(`Market news fetch failed (${res.status})`);
+  return (await res.json()) as MarketNewsItem[];
+}
+
 export interface BasicFinancials {
   high52: number | null;
   low52: number | null;

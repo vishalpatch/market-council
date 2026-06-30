@@ -11,10 +11,9 @@ export default async function AnalyticsPage() {
 
   if (!user) redirect("/login");
 
-  const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
 
   return (
-    <AppShell active="analytics" isAdmin={isAdmin}>
+    <AppShell active="analytics" userEmail={user.email}>
       <main className="mx-auto max-w-4xl px-8 py-16 lg:px-12">
         <header className="mb-16 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">

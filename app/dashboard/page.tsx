@@ -13,11 +13,10 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
-  const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
   const displayName = user.user_metadata?.full_name ?? user.email ?? "Investor";
 
   return (
-    <AppShell active="dashboard" isAdmin={isAdmin}>
+    <AppShell active="dashboard" userEmail={user.email}>
       <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
         {/* Masthead */}
         <header className="mb-20 border-b border-hairline pb-12">
