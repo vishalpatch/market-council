@@ -154,7 +154,7 @@ export default function Sidebar({
         <NavItem href="/dashboard#watchlist" label="Watchlist" icon="watchlist" active={active === "watchlist"} />
         <NavItem href="/dashboard/journal" label="Journal" icon="journal" active={active === "journal"} />
         <NavItem href="/dashboard/analytics" label="Analytics" icon="analytics" active={active === "analytics"} />
-        <NavItem href="/dashboard/sentiment" label="Sentiment" icon="sentiment" active={active === "sentiment"} />
+        <NavItem href="/dashboard/sentiment" label="Market Pulse" icon="sentiment" active={active === "sentiment"} />
         <NavItem href="/dashboard/committee" label="Committee" icon="committee" active={active === "committee"} />
         {isAdmin && (
           <NavItem href="/admin" label="Admin" icon="admin" active={active === "admin"} />

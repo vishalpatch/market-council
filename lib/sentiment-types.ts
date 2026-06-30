@@ -1,4 +1,4 @@
-// Client-safe types for the Sentiment War-Room. No server-only imports.
+// Client-safe types for Market Pulse (news sentiment). No server-only imports.
 import type { Verdict } from "./committee-types";
 
 export type { Verdict };
