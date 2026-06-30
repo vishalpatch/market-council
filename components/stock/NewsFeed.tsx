@@ -14,7 +14,7 @@ export interface NewsItem {
 export default function NewsFeed({ news }: { news: NewsItem[] }) {
   if (!news.length) {
     return (
-      <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-8 text-center text-sm text-zinc-500 backdrop-blur-xl">
+      <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-8 text-center text-sm text-zinc-500 backdrop-blur-xl">
         No recent news for this ticker.
       </div>
     );
@@ -28,7 +28,7 @@ export default function NewsFeed({ news }: { news: NewsItem[] }) {
           href={item.url}
           target="_blank"
           rel="noopener noreferrer"
-          className="group flex gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-[#00dc82]/40 hover:bg-white/[0.04]"
+          className="group flex gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-all duration-200 hover:-translate-y-0.5 hover:border-[#c8a45d]/40 hover:bg-[#ece6d9]/[0.04]"
         >
           {item.image && (
             // eslint-disable-next-line @next/next/no-img-element
@@ -43,11 +43,11 @@ export default function NewsFeed({ news }: { news: NewsItem[] }) {
           )}
           <div className="min-w-0 flex-1">
             <div className="mb-1.5 flex items-center gap-2 text-xs text-zinc-500">
-              <span className="font-medium text-[#00dc82]">{item.source}</span>
+              <span className="font-medium text-[#c8a45d]">{item.source}</span>
               <span>·</span>
               <span>{formatRelativeDate(item.datetime)}</span>
             </div>
-            <h4 className="font-medium leading-snug text-zinc-100 transition-colors group-hover:text-[#00dc82]">
+            <h4 className="font-medium leading-snug text-zinc-100 transition-colors group-hover:text-[#c8a45d]">
               {item.headline}
             </h4>
             {item.summary && (
@@ -58,7 +58,7 @@ export default function NewsFeed({ news }: { news: NewsItem[] }) {
           </div>
 
           <svg
-            className="mt-1 hidden shrink-0 text-zinc-600 transition-colors group-hover:text-[#00dc82] sm:block"
+            className="mt-1 hidden shrink-0 text-zinc-600 transition-colors group-hover:text-[#c8a45d] sm:block"
             width="16"
             height="16"
             viewBox="0 0 16 16"

@@ -22,8 +22,8 @@ import {
 import { formatPrice } from "@/lib/format";
 import CandlestickChart from "./CandlestickChart";
 
-const UP = "#00dc82";
-const DOWN = "#ff5470";
+const UP = "#c8a45d";
+const DOWN = "#cb7e68";
 
 interface TooltipProps {
   active?: boolean;
@@ -34,7 +34,7 @@ function ChartTooltip({ active, payload, currency }: TooltipProps & { currency: 
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="rounded-lg border border-white/[0.08] bg-black/80 px-3 py-2 backdrop-blur-xl">
+    <div className="rounded-lg border border-[#ece6d9]/[0.08] bg-black/80 px-3 py-2 backdrop-blur-xl">
       <p className="mb-0.5 text-xs text-zinc-400">{p.fullLabel}</p>
       <p className="font-mono text-sm font-semibold text-zinc-100">
         {formatPrice(p.close, currency)}
@@ -68,17 +68,17 @@ export default function PriceChart({
   const domain = [Math.min(...lows) * 0.99, Math.max(...highs) * 1.01];
 
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl">
+    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
       {/* Toggles */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex gap-1 rounded-lg border border-white/[0.08] bg-black/30 p-1">
+        <div className="flex gap-1 rounded-lg border border-[#ece6d9]/[0.08] bg-black/30 p-1">
           {CHART_TYPES.map((c) => (
             <button
               key={c.key}
               onClick={() => setType(c.key)}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                 type === c.key
-                  ? "bg-[#00dc82] text-black"
+                  ? "bg-[#c8a45d] text-black"
                   : "text-zinc-400 hover:text-zinc-100"
               }`}
             >
@@ -87,14 +87,14 @@ export default function PriceChart({
           ))}
         </div>
 
-        <div className="flex gap-1 rounded-lg border border-white/[0.08] bg-black/30 p-1">
+        <div className="flex gap-1 rounded-lg border border-[#ece6d9]/[0.08] bg-black/30 p-1">
           {TIME_RANGES.map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                 range === r
-                  ? "bg-white/10 text-zinc-100"
+                  ? "bg-[#ece6d9]/10 text-zinc-100"
                   : "text-zinc-400 hover:text-zinc-100"
               }`}
             >

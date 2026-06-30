@@ -2,43 +2,35 @@ import Link from "next/link";
 
 export default function Header() {
   return (
-    <header className="border-b border-zinc-800 bg-zinc-950/80 backdrop-blur-sm sticky top-0 z-50">
-      <div className="max-w-6xl mx-auto px-6 py-4 flex items-center justify-between">
-        <Link href="/" className="flex items-center gap-3">
-          <div className="w-8 h-8 rounded-lg bg-gradient-to-br from-emerald-400 to-cyan-500 flex items-center justify-center">
-            <svg
-              width="16"
-              height="16"
-              viewBox="0 0 16 16"
-              fill="none"
-              xmlns="http://www.w3.org/2000/svg"
-            >
+    <header className="fixed top-0 z-50 w-full">
+      <div className="mx-auto flex max-w-6xl items-center justify-between px-6 py-6">
+        <Link href="/" className="flex items-center gap-2.5">
+          <span className="flex h-7 w-7 items-center justify-center text-gold">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
               <path
-                d="M2 12L6 7L9 10L13 4"
-                stroke="white"
+                d="M3 18L9 10.5L13.5 15L21 6"
+                stroke="currentColor"
                 strokeWidth="2"
                 strokeLinecap="round"
                 strokeLinejoin="round"
               />
             </svg>
-          </div>
-          <span className="text-lg font-semibold tracking-tight text-zinc-50">
+          </span>
+          <span className="font-serif text-lg tracking-editorial text-paper">
             Market Council
           </span>
         </Link>
-        <nav className="hidden sm:flex items-center gap-6 text-sm text-zinc-400">
-          <a href="#features" className="hover:text-zinc-50 transition-colors">
-            Features
-          </a>
-          <a href="#how-it-works" className="hover:text-zinc-50 transition-colors">
-            How It Works
-          </a>
-          <Link href="/login" className="hover:text-zinc-50 transition-colors">
+
+        <nav className="flex items-center gap-6 text-sm">
+          <Link
+            href="/login"
+            className="text-muted transition-colors hover:text-paper"
+          >
             Sign In
           </Link>
           <Link
             href="/signup"
-            className="px-4 py-1.5 rounded-full bg-emerald-500 text-zinc-950 font-medium hover:bg-emerald-400 transition-colors"
+            className="rounded-full border border-hairline-strong px-4 py-1.5 font-medium text-paper transition-colors hover:border-gold hover:text-gold"
           >
             Get Started
           </Link>

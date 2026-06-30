@@ -24,7 +24,7 @@ export default function MetricsGrid({
   currency: string;
 }) {
   const positive = quote.change >= 0;
-  const accent = positive ? "#00dc82" : "#ff5470";
+  const accent = positive ? "#c8a45d" : "#cb7e68";
 
   const stats = useMemo(
     () => getMockStats(symbol, quote.price),
@@ -45,7 +45,7 @@ export default function MetricsGrid({
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {/* Featured current price */}
-      <div className="col-span-2 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl">
+      <div className="col-span-2 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
         <p className="mb-1 text-xs uppercase tracking-wider text-zinc-500">
           Current Price
         </p>
@@ -64,7 +64,7 @@ export default function MetricsGrid({
       {metrics.map((m) => (
         <div
           key={m.label}
-          className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-white/[0.16]"
+          className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
         >
           <p className="mb-1.5 text-xs uppercase tracking-wider text-zinc-500">
             {m.label}

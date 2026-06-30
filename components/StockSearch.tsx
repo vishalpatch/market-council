@@ -85,20 +85,20 @@ export default function StockSearch() {
             value={input}
             onChange={(e) => setInput(e.target.value.toUpperCase())}
             placeholder="Search any ticker — AAPL, NVDA, TSLA, MSFT…"
-            className="w-full rounded-xl border border-white/[0.08] bg-white/[0.02] py-4 pl-11 pr-4 font-mono text-sm tracking-wide text-zinc-50 placeholder-zinc-600 backdrop-blur-xl transition-all focus:border-[#00dc82]/50 focus:outline-none focus:ring-1 focus:ring-[#00dc82]/50"
+            className="w-full rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] py-4 pl-11 pr-4 font-mono text-sm tracking-wide text-zinc-50 placeholder-zinc-600 backdrop-blur-xl transition-all focus:border-[#c8a45d]/50 focus:outline-none focus:ring-1 focus:ring-[#c8a45d]/50"
           />
         </div>
         <button
           type="submit"
           disabled={loading || !input.trim()}
-          className="rounded-xl bg-[#00dc82] px-6 py-4 text-sm font-semibold text-black transition-all hover:bg-[#00dc82]/90 hover:shadow-[0_0_24px_-4px_#00dc82] disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-xl bg-[#c8a45d] px-6 py-4 text-sm font-semibold text-black transition-all hover:bg-[#c8a45d]/90 hover:shadow-[0_0_24px_-4px_#c8a45d] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {loading ? "Loading…" : "Analyze"}
         </button>
       </form>
 
       {error && (
-        <div className="rounded-2xl border border-[#ff5470]/30 bg-[#ff5470]/10 px-5 py-4 text-sm text-[#ff5470]">
+        <div className="rounded-2xl border border-[#cb7e68]/30 bg-[#cb7e68]/10 px-5 py-4 text-sm text-[#cb7e68]">
           {error}
         </div>
       )}
@@ -108,7 +108,7 @@ export default function StockSearch() {
       {data && !loading && (
         <div className="space-y-6">
           {/* Company header */}
-          <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl">
+          <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
             {data.profile.logo && (
               <div className="flex h-12 w-12 shrink-0 items-center justify-center overflow-hidden rounded-xl bg-white">
                 <Image
@@ -125,7 +125,7 @@ export default function StockSearch() {
                 <h3 className="text-xl font-bold tracking-tight text-zinc-50">
                   {data.profile.name}
                 </h3>
-                <span className="rounded-md bg-white/[0.06] px-2 py-0.5 font-mono text-xs text-zinc-400">
+                <span className="rounded-md bg-[#ece6d9]/[0.06] px-2 py-0.5 font-mono text-xs text-zinc-400">
                   {data.profile.ticker}
                 </span>
               </div>
@@ -167,23 +167,23 @@ export default function StockSearch() {
 function LoadingSkeleton() {
   return (
     <div className="animate-pulse space-y-6">
-      <div className="flex items-center gap-4 rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5">
-        <div className="h-12 w-12 rounded-xl bg-white/[0.06]" />
+      <div className="flex items-center gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5">
+        <div className="h-12 w-12 rounded-xl bg-[#ece6d9]/[0.06]" />
         <div className="space-y-2">
-          <div className="h-5 w-48 rounded bg-white/[0.06]" />
-          <div className="h-3 w-32 rounded bg-white/[0.06]" />
+          <div className="h-5 w-48 rounded bg-[#ece6d9]/[0.06]" />
+          <div className="h-3 w-32 rounded bg-[#ece6d9]/[0.06]" />
         </div>
       </div>
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
-        <div className="col-span-2 h-28 rounded-2xl border border-white/[0.08] bg-white/[0.02]" />
+        <div className="col-span-2 h-28 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02]" />
         {Array.from({ length: 8 }).map((_, i) => (
-          <div key={i} className="h-20 rounded-2xl border border-white/[0.08] bg-white/[0.02]" />
+          <div key={i} className="h-20 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02]" />
         ))}
       </div>
-      <div className="h-[420px] rounded-2xl border border-white/[0.08] bg-white/[0.02]" />
+      <div className="h-[420px] rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02]" />
       <div className="space-y-3">
         {Array.from({ length: 3 }).map((_, i) => (
-          <div key={i} className="h-24 rounded-2xl border border-white/[0.08] bg-white/[0.02]" />
+          <div key={i} className="h-24 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02]" />
         ))}
       </div>
     </div>

@@ -106,7 +106,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
       <div>
         {/* Input */}
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-2 backdrop-blur-xl">
+          <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-2 backdrop-blur-xl">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -127,7 +127,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <button
                 type="submit"
                 disabled={loading || !input.trim()}
-                className="rounded-xl bg-[#00dc82] px-5 py-2.5 text-sm font-semibold text-black transition-all hover:bg-[#00dc82]/90 hover:shadow-[0_0_24px_-4px_#00dc82] disabled:cursor-not-allowed disabled:opacity-40"
+                className="rounded-xl bg-[#c8a45d] px-5 py-2.5 text-sm font-semibold text-black transition-all hover:bg-[#c8a45d]/90 hover:shadow-[0_0_24px_-4px_#c8a45d] disabled:cursor-not-allowed disabled:opacity-40"
               >
                 {loading ? "Convening…" : "Convene Committee"}
               </button>
@@ -136,7 +136,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
         </form>
 
         {error && (
-          <div className="mb-6 rounded-2xl border border-[#ff5470]/30 bg-[#ff5470]/10 px-5 py-4 text-sm text-[#ff5470]">
+          <div className="mb-6 rounded-2xl border border-[#cb7e68]/30 bg-[#cb7e68]/10 px-5 py-4 text-sm text-[#cb7e68]">
             {error}
           </div>
         )}
@@ -146,7 +146,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
         {result && !loading && (
           <div className="space-y-6">
             {/* Thesis */}
-            <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl">
+            <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
               <p className="mb-1 text-xs uppercase tracking-wider text-zinc-500">
                 Thesis under review
               </p>
@@ -173,13 +173,13 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <button
                 onClick={handleSave}
                 disabled={saving || saved}
-                className="rounded-xl border border-white/[0.12] bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-white/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl border border-[#ece6d9]/[0.12] bg-[#ece6d9]/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-[#ece6d9]/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {saved ? "✓ Saved" : saving ? "Saving…" : "Save Analysis"}
               </button>
               <ExportPdfButton thesis={thesis} result={result} />
               {historyError && (
-                <span className="text-xs text-[#ff5470]">{historyError}</span>
+                <span className="text-xs text-[#cb7e68]">{historyError}</span>
               )}
             </div>
             <p className="text-[11px] text-zinc-600">
@@ -204,7 +204,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <button
                 key={a.id}
                 onClick={() => openSaved(a)}
-                className="block w-full rounded-xl border border-white/[0.08] bg-white/[0.02] p-3 text-left backdrop-blur-xl transition-colors hover:border-white/[0.16]"
+                className="block w-full rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-3 text-left backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
               >
                 <div className="mb-1 flex items-center justify-between gap-2">
                   <VerdictBadge verdict={a.result.chairman.verdict} size="sm" />
@@ -229,18 +229,18 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
   const { chairman } = result;
   const accent =
     chairman.verdict === "BULLISH"
-      ? "#00dc82"
+      ? "#c8a45d"
       : chairman.verdict === "BEARISH"
-        ? "#ff5470"
+        ? "#cb7e68"
         : "#a1a1aa";
   return (
     <div
-      className="rounded-2xl border bg-white/[0.02] p-6 backdrop-blur-xl"
+      className="rounded-2xl border bg-[#ece6d9]/[0.02] p-6 backdrop-blur-xl"
       style={{ borderColor: `${accent}40` }}
     >
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-white/[0.04] text-xl">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ece6d9]/[0.04] text-xl">
             ⚖️
           </div>
           <div>
@@ -259,7 +259,7 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
             {chairman.overallScore}/100
           </span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
           <div
             className="h-full rounded-full transition-all"
             style={{ width: `${chairman.overallScore}%`, backgroundColor: accent }}
@@ -269,7 +269,7 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
 
       <p className="mb-3 text-sm leading-relaxed text-zinc-300">{chairman.summary}</p>
 
-      <div className="rounded-xl border border-white/[0.08] bg-black/30 p-4">
+      <div className="rounded-xl border border-[#ece6d9]/[0.08] bg-black/30 p-4">
         <p className="mb-1 text-[11px] uppercase tracking-wider text-zinc-500">
           Recommendation
         </p>
@@ -304,7 +304,7 @@ function ExportPdfButton({
     <button
       onClick={handleExport}
       disabled={exporting}
-      className="flex items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-white/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex items-center gap-2 rounded-xl border border-[#ece6d9]/[0.12] bg-[#ece6d9]/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-[#ece6d9]/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
     >
       {exporting ? (
         <>
@@ -338,7 +338,7 @@ function ConveningState() {
     "Macro Economist",
   ];
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-10 text-center backdrop-blur-xl">
+    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-10 text-center backdrop-blur-xl">
       <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center">
         <Spinner size="md" />
       </div>
@@ -350,7 +350,7 @@ function ConveningState() {
         {members.map((m, i) => (
           <span
             key={m}
-            className="animate-pulse rounded-full border border-white/[0.08] bg-white/[0.02] px-3 py-1 text-xs text-zinc-400"
+            className="animate-pulse rounded-full border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-3 py-1 text-xs text-zinc-400"
             style={{ animationDelay: `${i * 150}ms` }}
           >
             {m}

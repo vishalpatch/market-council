@@ -1,8 +1,8 @@
 import type { Verdict } from "@/lib/committee-types";
 
 const STYLES: Record<Verdict, string> = {
-  BULLISH: "border-[#00dc82]/40 bg-[#00dc82]/10 text-[#00dc82]",
-  BEARISH: "border-[#ff5470]/40 bg-[#ff5470]/10 text-[#ff5470]",
+  BULLISH: "border-[#c8a45d]/40 bg-[#c8a45d]/10 text-[#c8a45d]",
+  BEARISH: "border-[#cb7e68]/40 bg-[#cb7e68]/10 text-[#cb7e68]",
   NEUTRAL: "border-zinc-600/50 bg-zinc-500/10 text-zinc-300",
 };
 

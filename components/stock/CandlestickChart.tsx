@@ -4,8 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import type { Candle } from "@/lib/mockChart";
 import { formatPrice } from "@/lib/format";
 
-const UP = "#00dc82";
-const DOWN = "#ff5470";
+const UP = "#c8a45d";
+const DOWN = "#cb7e68";
 const HEIGHT = 360;
 const PAD = { top: 16, right: 56, bottom: 28, left: 8 };
 
@@ -165,7 +165,7 @@ export default function CandlestickChart({
       {/* Tooltip */}
       {hovered && hover !== null && (
         <div
-          className="pointer-events-none absolute top-2 rounded-lg border border-white/[0.08] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl"
+          className="pointer-events-none absolute top-2 rounded-lg border border-[#ece6d9]/[0.08] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl"
           style={{
             left: Math.min(Math.max(x(hover) - 70, 0), width - 150),
           }}

@@ -109,18 +109,18 @@ export default function WatchlistSection({ userId }: { userId: string }) {
           onChange={(e) => setInput(e.target.value.toUpperCase())}
           placeholder="Add ticker (e.g. AAPL)"
           maxLength={10}
-          className="flex-1 rounded-xl border border-white/[0.08] bg-white/[0.02] px-4 py-2.5 text-sm text-zinc-50 placeholder-zinc-600 focus:border-white/[0.2] focus:outline-none"
+          className="flex-1 rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-2.5 text-sm text-zinc-50 placeholder-zinc-600 focus:border-[#ece6d9]/[0.2] focus:outline-none"
         />
         <button
           type="submit"
           disabled={adding || !input.trim()}
-          className="rounded-xl bg-white/[0.06] px-5 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:bg-white/[0.1] disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-xl bg-[#ece6d9]/[0.06] px-5 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:bg-[#ece6d9]/[0.1] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {adding ? "Adding…" : "Add"}
         </button>
       </form>
 
-      {addError && <p className="mb-3 text-xs text-[#ff5470]">{addError}</p>}
+      {addError && <p className="mb-3 text-xs text-[#cb7e68]">{addError}</p>}
 
       {items.length === 0 ? (
         <p className="text-sm text-zinc-600">
@@ -132,16 +132,16 @@ export default function WatchlistSection({ userId }: { userId: string }) {
             const data = tickerData[item.ticker];
             const isLoading = data === undefined;
             const isUp = data && data.changePercent >= 0;
-            const changeColor = isUp ? "#00dc82" : "#ff5470";
+            const changeColor = isUp ? "#c8a45d" : "#cb7e68";
 
             return (
               <div
                 key={item.id}
-                className="group relative rounded-2xl border border-white/[0.08] bg-white/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-white/[0.16]"
+                className="group relative rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
               >
                 <button
                   onClick={() => handleRemove(item.id, item.ticker)}
-                  className="absolute right-3 top-3 text-zinc-600 opacity-0 transition-opacity hover:text-[#ff5470] group-hover:opacity-100"
+                  className="absolute right-3 top-3 text-zinc-600 opacity-0 transition-opacity hover:text-[#cb7e68] group-hover:opacity-100"
                   aria-label="Remove"
                 >
                   ✕
@@ -153,8 +153,8 @@ export default function WatchlistSection({ userId }: { userId: string }) {
 
                 {isLoading ? (
                   <div className="space-y-1.5">
-                    <div className="h-3 w-28 animate-pulse rounded bg-white/[0.06]" />
-                    <div className="h-5 w-16 animate-pulse rounded bg-white/[0.06]" />
+                    <div className="h-3 w-28 animate-pulse rounded bg-[#ece6d9]/[0.06]" />
+                    <div className="h-5 w-16 animate-pulse rounded bg-[#ece6d9]/[0.06]" />
                   </div>
                 ) : data ? (
                   <>

@@ -15,7 +15,7 @@ export default function GlobalError({
 
   return (
     <div className="min-h-screen bg-zinc-950 text-zinc-50 flex flex-col items-center justify-center px-6 text-center">
-      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#ff5470]/30 bg-[#ff5470]/10">
+      <div className="mb-6 flex h-16 w-16 items-center justify-center rounded-2xl border border-[#cb7e68]/30 bg-[#cb7e68]/10">
         <span className="text-2xl">⚠</span>
       </div>
       <h1 className="mb-3 text-2xl font-bold tracking-tight">Something went wrong</h1>
@@ -25,7 +25,7 @@ export default function GlobalError({
       <div className="flex gap-3">
         <button
           onClick={reset}
-          className="rounded-xl bg-[#00dc82] px-6 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#00dc82]/90"
+          className="rounded-xl bg-[#c8a45d] px-6 py-2.5 text-sm font-semibold text-black transition-colors hover:bg-[#c8a45d]/90"
         >
           Try again
         </button>

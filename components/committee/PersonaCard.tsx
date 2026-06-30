@@ -4,10 +4,10 @@ import VerdictBadge from "./VerdictBadge";
 
 export default function PersonaCard({ persona }: { persona: PersonaVerdict }) {
   return (
-    <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-5 backdrop-blur-xl transition-colors hover:border-white/[0.16]">
+    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]">
       <div className="mb-3 flex items-start justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-white/[0.04] text-xl">
+          <div className="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-[#ece6d9]/[0.04] text-xl">
             {personaIcon(persona.name)}
           </div>
           <div>
@@ -26,9 +26,9 @@ export default function PersonaCard({ persona }: { persona: PersonaVerdict }) {
           <span>Confidence</span>
           <span className="font-mono text-zinc-300">{persona.confidence}/10</span>
         </div>
-        <div className="h-1.5 w-full overflow-hidden rounded-full bg-white/[0.06]">
+        <div className="h-1.5 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
           <div
-            className="h-full rounded-full bg-[#00dc82] transition-all"
+            className="h-full rounded-full bg-[#c8a45d] transition-all"
             style={{ width: `${(persona.confidence / 10) * 100}%` }}
           />
         </div>

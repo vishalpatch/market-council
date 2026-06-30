@@ -1,9 +1,9 @@
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
-import JournalClient from "@/components/journal/JournalClient";
+import AnalyticsClient from "@/components/analytics/AnalyticsClient";
 
-export default async function JournalPage() {
+export default async function AnalyticsPage() {
   const supabase = await createClient();
   const {
     data: { user },
@@ -14,22 +14,22 @@ export default async function JournalPage() {
   const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
 
   return (
-    <AppShell active="journal" isAdmin={isAdmin}>
+    <AppShell active="analytics" isAdmin={isAdmin}>
       <main className="mx-auto max-w-4xl px-8 py-16 lg:px-12">
         <header className="mb-16 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">
-            Trade Journal
+            Performance Analytics
           </p>
           <h1 className="font-serif text-5xl font-light leading-tight tracking-editorial">
-            Your Journal
+            Your Track Record
           </h1>
           <p className="mt-4 max-w-xl text-pretty leading-relaxed text-muted">
-            Log investment ideas, theses, and decisions — and track each one from
-            watching to entry to exit.
+            Patterns drawn from your trade journal — activity over time, win rate
+            on closed positions, and where your conviction concentrates.
           </p>
         </header>
 
-        <JournalClient userId={user.id} />
+        <AnalyticsClient />
       </main>
     </AppShell>
   );

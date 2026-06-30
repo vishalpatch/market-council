@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
-import DashboardNav from "@/components/DashboardNav";
+import AppShell from "@/components/AppShell";
 import StockSearch from "@/components/StockSearch";
 import WatchlistSection from "@/components/watchlist/WatchlistSection";
 
@@ -13,112 +13,99 @@ export default async function DashboardPage() {
 
   if (!user) redirect("/login");
 
-  const displayName =
-    user.user_metadata?.full_name ?? user.email ?? "Investor";
+  const isAdmin = !!process.env.ADMIN_EMAIL && user.email === process.env.ADMIN_EMAIL;
+  const displayName = user.user_metadata?.full_name ?? user.email ?? "Investor";
 
   return (
-    <div className="min-h-screen bg-zinc-950 text-zinc-50">
-      <DashboardNav email={user.email} active="dashboard" />
-
-      <main className="max-w-6xl mx-auto px-6 py-16">
-        {/* Welcome banner */}
-        <div className="mb-12">
-          <p className="text-emerald-400 text-sm font-medium mb-2">Dashboard</p>
-          <h1 className="text-4xl font-bold tracking-tight mb-3">
-            Welcome back, {displayName.split(" ")[0]}
+    <AppShell active="dashboard" isAdmin={isAdmin}>
+      <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
+        {/* Masthead */}
+        <header className="mb-20 border-b border-hairline pb-12">
+          <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Dashboard</p>
+          <h1 className="font-serif text-5xl font-light leading-tight tracking-editorial">
+            Good to see you, {displayName.split(" ")[0]}.
           </h1>
-          <p className="text-zinc-400">
-            Your AI investment committee is ready. Submit a thesis to begin.
+          <p className="mt-4 max-w-xl text-pretty leading-relaxed text-muted">
+            Your council stands ready. Track the names you care about, or bring a
+            thesis to the committee.
           </p>
-        </div>
+        </header>
 
-        {/* Stat cards */}
-        <div className="grid sm:grid-cols-3 gap-4 mb-12">
+        {/* Stat row */}
+        <div className="mb-20 grid grid-cols-1 gap-px sm:grid-cols-3">
           {[
-            { label: "Analyses Run", value: "0", delta: "Get started below" },
-            { label: "Active Positions", value: "0", delta: "None tracked yet" },
-            { label: "Avg Conviction", value: "—", delta: "No data yet" },
+            { label: "Analyses Run", value: "0", sub: "Get started below" },
+            { label: "Tracked Names", value: "—", sub: "Build your watchlist" },
+            { label: "Avg Conviction", value: "—", sub: "No data yet" },
           ].map((stat) => (
-            <div
-              key={stat.label}
-              className="rounded-2xl border border-zinc-800 bg-zinc-900/50 p-6"
-            >
-              <p className="text-zinc-400 text-sm mb-1">{stat.label}</p>
-              <p className="text-3xl font-bold mb-1">{stat.value}</p>
-              <p className="text-xs text-zinc-500">{stat.delta}</p>
+            <div key={stat.label} className="border-t border-hairline pt-6 sm:pr-8">
+              <p className="text-xs uppercase tracking-[0.15em] text-faint">
+                {stat.label}
+              </p>
+              <p className="mt-2 font-serif text-4xl font-light">{stat.value}</p>
+              <p className="mt-1 text-sm text-muted">{stat.sub}</p>
             </div>
           ))}
         </div>
 
         {/* Watchlist */}
-        <div className="mb-12">
-          <p className="text-emerald-400 text-sm font-medium mb-2">Watchlist</p>
-          <h2 className="text-2xl font-bold tracking-tight mb-1">Your Watchlist</h2>
-          <p className="text-zinc-400 text-sm mb-6">
-            Track tickers you care about. Prices update each time you load the page.
-          </p>
+        <section id="watchlist" className="mb-20 scroll-mt-8">
+          <div className="mb-8 flex items-baseline justify-between border-b border-hairline pb-4">
+            <h2 className="font-serif text-3xl font-light tracking-editorial">
+              Watchlist
+            </h2>
+            <p className="text-xs uppercase tracking-[0.15em] text-faint">
+              Live · Finnhub
+            </p>
+          </div>
           <WatchlistSection userId={user.id} />
-        </div>
+        </section>
 
         {/* Stock lookup */}
-        <div className="mb-12">
-          <p className="text-emerald-400 text-sm font-medium mb-2">Market Data</p>
-          <h2 className="text-2xl font-bold tracking-tight mb-1">Stock Lookup</h2>
-          <p className="text-zinc-400 text-sm mb-6">
-            Enter any ticker to see real-time price, financials, and latest news.
-          </p>
+        <section className="mb-20">
+          <div className="mb-8 flex items-baseline justify-between border-b border-hairline pb-4">
+            <h2 className="font-serif text-3xl font-light tracking-editorial">
+              Market Lookup
+            </h2>
+            <p className="text-xs uppercase tracking-[0.15em] text-faint">
+              Price · Fundamentals · News
+            </p>
+          </div>
           <StockSearch />
-        </div>
+        </section>
 
         {/* CTAs */}
-        <div className="grid sm:grid-cols-2 gap-4">
-          <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/30 p-10 text-center">
-            <div className="w-12 h-12 rounded-xl bg-emerald-950 border border-emerald-800 flex items-center justify-center mx-auto mb-4">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M10 4V16M4 10H16"
-                  stroke="#10b981"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <h2 className="text-lg font-semibold mb-2">Convene the AI Committee</h2>
-            <p className="text-zinc-400 text-sm mb-6 max-w-xs mx-auto">
-              Five specialized AI analysts debate your thesis and a Chairman delivers a verdict.
+        <section className="grid gap-px sm:grid-cols-2">
+          <Link
+            href="/dashboard/committee"
+            className="group border-t border-hairline py-10 transition-colors sm:pr-10"
+          >
+            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-gold">
+              The Committee
             </p>
-            <Link
-              href="/dashboard/committee"
-              className="inline-block px-6 py-2.5 rounded-xl bg-emerald-500 text-zinc-950 font-semibold hover:bg-emerald-400 transition-colors text-sm"
-            >
-              New Analysis
-            </Link>
-          </div>
-
-          <div className="rounded-2xl border border-dashed border-zinc-700 bg-zinc-900/30 p-10 text-center">
-            <div className="w-12 h-12 rounded-xl bg-zinc-900 border border-zinc-700 flex items-center justify-center mx-auto mb-4">
-              <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
-                <path
-                  d="M4 6h12M4 10h8M4 14h10"
-                  stroke="#71717a"
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              </svg>
-            </div>
-            <h2 className="text-lg font-semibold mb-2">Trade Journal</h2>
-            <p className="text-zinc-400 text-sm mb-6 max-w-xs mx-auto">
-              Log investment ideas and track their status from watching to entry to exit.
+            <h3 className="mb-3 font-serif text-2xl font-light transition-colors group-hover:text-gold">
+              Convene a new analysis →
+            </h3>
+            <p className="text-pretty leading-relaxed text-muted">
+              Five analysts debate your thesis; the chairman delivers a verdict.
             </p>
-            <Link
-              href="/dashboard/journal"
-              className="inline-block px-6 py-2.5 rounded-xl border border-zinc-700 text-zinc-200 font-semibold hover:border-zinc-500 transition-colors text-sm"
-            >
-              Open Journal
-            </Link>
-          </div>
-        </div>
+          </Link>
+          <Link
+            href="/dashboard/journal"
+            className="group border-t border-hairline py-10 transition-colors sm:pl-10"
+          >
+            <p className="mb-3 text-xs uppercase tracking-[0.2em] text-gold">
+              The Journal
+            </p>
+            <h3 className="mb-3 font-serif text-2xl font-light transition-colors group-hover:text-gold">
+              Log an investment idea →
+            </h3>
+            <p className="text-pretty leading-relaxed text-muted">
+              Record theses and track them from watching to entry to exit.
+            </p>
+          </Link>
+        </section>
       </main>
-    </div>
+    </AppShell>
   );
 }
