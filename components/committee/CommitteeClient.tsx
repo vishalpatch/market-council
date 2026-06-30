@@ -5,6 +5,7 @@ import { createClient } from "@/lib/supabase/client";
 import type { CommitteeResult } from "@/lib/committee-types";
 import PersonaCard from "./PersonaCard";
 import VerdictBadge from "./VerdictBadge";
+import Spinner from "@/components/Spinner";
 
 interface SavedAnalysis {
   id: string;
@@ -167,8 +168,8 @@ export default function CommitteeClient({ userId }: { userId: string }) {
             {/* Chairman */}
             <ChairmanCard result={result} />
 
-            {/* Save */}
-            <div className="flex items-center gap-3">
+            {/* Save + Export */}
+            <div className="flex flex-wrap items-center gap-3">
               <button
                 onClick={handleSave}
                 disabled={saving || saved}
@@ -176,6 +177,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               >
                 {saved ? "✓ Saved" : saving ? "Saving…" : "Save Analysis"}
               </button>
+              <ExportPdfButton thesis={thesis} result={result} />
               {historyError && (
                 <span className="text-xs text-[#ff5470]">{historyError}</span>
               )}
@@ -279,6 +281,54 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
   );
 }
 
+function ExportPdfButton({
+  thesis,
+  result,
+}: {
+  thesis: string;
+  result: CommitteeResult;
+}) {
+  const [exporting, setExporting] = useState(false);
+
+  async function handleExport() {
+    setExporting(true);
+    try {
+      const { exportCommitteePdf } = await import("@/lib/exportPdf");
+      await exportCommitteePdf(thesis, result);
+    } finally {
+      setExporting(false);
+    }
+  }
+
+  return (
+    <button
+      onClick={handleExport}
+      disabled={exporting}
+      className="flex items-center gap-2 rounded-xl border border-white/[0.12] bg-white/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-white/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+    >
+      {exporting ? (
+        <>
+          <Spinner size="sm" />
+          Generating…
+        </>
+      ) : (
+        <>
+          <svg width="14" height="14" viewBox="0 0 14 14" fill="none" className="shrink-0">
+            <path
+              d="M7 1v8M4 6l3 3 3-3M2 10v1a1 1 0 001 1h8a1 1 0 001-1v-1"
+              stroke="currentColor"
+              strokeWidth="1.5"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+            />
+          </svg>
+          Export PDF
+        </>
+      )}
+    </button>
+  );
+}
+
 function ConveningState() {
   const members = [
     "Value Analyst",
@@ -290,7 +340,7 @@ function ConveningState() {
   return (
     <div className="rounded-2xl border border-white/[0.08] bg-white/[0.02] p-10 text-center backdrop-blur-xl">
       <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center">
-        <span className="h-8 w-8 animate-spin rounded-full border-2 border-white/10 border-t-[#00dc82]" />
+        <Spinner size="md" />
       </div>
       <p className="mb-1 font-medium text-zinc-200">Convening the committee…</p>
       <p className="text-sm text-zinc-500">

@@ -33,6 +33,9 @@ export default function Header() {
           <a href="#how-it-works" className="hover:text-zinc-50 transition-colors">
             How It Works
           </a>
+          <Link href="/login" className="hover:text-zinc-50 transition-colors">
+            Sign In
+          </Link>
           <Link
             href="/signup"
             className="px-4 py-1.5 rounded-full bg-emerald-500 text-zinc-950 font-medium hover:bg-emerald-400 transition-colors"
