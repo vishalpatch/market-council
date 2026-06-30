@@ -9,6 +9,8 @@ export type NavKey =
   | "journal"
   | "analytics"
   | "sentiment"
+  | "risk"
+  | "calendar"
   | "committee"
   | "admin";
 
@@ -70,6 +72,29 @@ function Icon({ name }: { name: NavKey | "logo" | "signout" }) {
       return (
         <svg {...common}>
           <path d="M3 12h4l2-6 4 12 2-6h6" />
+        </svg>
+      );
+    case "risk":
+      return (
+        <svg {...common}>
+          <line x1="4" y1="21" x2="4" y2="14" />
+          <line x1="4" y1="10" x2="4" y2="3" />
+          <line x1="12" y1="21" x2="12" y2="12" />
+          <line x1="12" y1="8" x2="12" y2="3" />
+          <line x1="20" y1="21" x2="20" y2="16" />
+          <line x1="20" y1="12" x2="20" y2="3" />
+          <line x1="2" y1="14" x2="6" y2="14" />
+          <line x1="10" y1="8" x2="14" y2="8" />
+          <line x1="18" y1="16" x2="22" y2="16" />
+        </svg>
+      );
+    case "calendar":
+      return (
+        <svg {...common}>
+          <rect x="3" y="4" width="18" height="18" rx="2" />
+          <line x1="3" y1="9" x2="21" y2="9" />
+          <line x1="8" y1="2" x2="8" y2="6" />
+          <line x1="16" y1="2" x2="16" y2="6" />
         </svg>
       );
     case "committee":
@@ -155,6 +180,8 @@ export default function Sidebar({
         <NavItem href="/dashboard/journal" label="Journal" icon="journal" active={active === "journal"} />
         <NavItem href="/dashboard/analytics" label="Analytics" icon="analytics" active={active === "analytics"} />
         <NavItem href="/dashboard/sentiment" label="Market Pulse" icon="sentiment" active={active === "sentiment"} />
+        <NavItem href="/dashboard/risk" label="Risk Simulator" icon="risk" active={active === "risk"} />
+        <NavItem href="/dashboard/calendar" label="Calendar" icon="calendar" active={active === "calendar"} />
         <NavItem href="/dashboard/committee" label="Committee" icon="committee" active={active === "committee"} />
         {isAdmin && (
           <NavItem href="/admin" label="Admin" icon="admin" active={active === "admin"} />

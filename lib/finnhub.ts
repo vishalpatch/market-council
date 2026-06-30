@@ -85,3 +85,67 @@ export async function getCompanyNews(symbol: string): Promise<NewsItem[]> {
   if (!res.ok) throw new Error(`News fetch failed (${res.status})`);
   return res.json();
 }
+
+export interface EarningsEvent {
+  symbol: string;
+  date: string; // YYYY-MM-DD
+  hour: string; // "bmo" | "amc" | "dmh" | ""
+  quarter: number;
+  year: number;
+  epsEstimate: number | null;
+  epsActual: number | null;
+  revenueEstimate: number | null;
+  revenueActual: number | null;
+}
+
+export async function getEarningsCalendar(
+  symbol: string,
+  from: string,
+  to: string
+): Promise<EarningsEvent[]> {
+  const res = await fetch(
+    `${BASE}/calendar/earnings?from=${from}&to=${to}&symbol=${encodeURIComponent(
+      symbol
+    )}&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`Earnings calendar fetch failed (${res.status})`);
+  const d = await res.json();
+  return (d.earningsCalendar ?? []) as EarningsEvent[];
+}
+
+/** Market-wide earnings for a date range (no symbol filter). */
+export async function getEarningsCalendarRange(
+  from: string,
+  to: string
+): Promise<EarningsEvent[]> {
+  const res = await fetch(
+    `${BASE}/calendar/earnings?from=${from}&to=${to}&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`Earnings calendar fetch failed (${res.status})`);
+  const d = await res.json();
+  return (d.earningsCalendar ?? []) as EarningsEvent[];
+}
+
+export interface IpoEvent {
+  symbol: string;
+  name: string;
+  date: string;
+  exchange: string;
+  price: string;
+  numberOfShares: number;
+  totalSharesValue: number;
+  status: string;
+}
+
+/** Upcoming IPOs for a date range (free tier). */
+export async function getIpoCalendar(from: string, to: string): Promise<IpoEvent[]> {
+  const res = await fetch(
+    `${BASE}/calendar/ipo?from=${from}&to=${to}&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`IPO calendar fetch failed (${res.status})`);
+  const d = await res.json();
+  return (d.ipoCalendar ?? []) as IpoEvent[];
+}
