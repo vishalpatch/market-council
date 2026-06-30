@@ -24,7 +24,6 @@ import {
   type HoldingResolved,
 } from "@/lib/stress";
 
-const GOLD = "#c8a45d";
 const UP = "#7ba890";
 const DOWN = "#cb7e68";
 const MUTED = "#9b9486";
