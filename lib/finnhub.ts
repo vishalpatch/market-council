@@ -149,3 +149,23 @@ export async function getIpoCalendar(from: string, to: string): Promise<IpoEvent
   const d = await res.json();
   return (d.ipoCalendar ?? []) as IpoEvent[];
 }
+
+export interface BasicFinancials {
+  high52: number | null;
+  low52: number | null;
+}
+
+/** 52-week high/low from basic financials (free tier). */
+export async function getBasicFinancials(symbol: string): Promise<BasicFinancials> {
+  const res = await fetch(
+    `${BASE}/stock/metric?symbol=${encodeURIComponent(symbol)}&metric=all&token=${key()}`,
+    { next: { revalidate: 3600 } }
+  );
+  if (!res.ok) throw new Error(`Metrics fetch failed (${res.status})`);
+  const d = await res.json();
+  const m = d.metric ?? {};
+  return {
+    high52: m["52WeekHigh"] ?? null,
+    low52: m["52WeekLow"] ?? null,
+  };
+}

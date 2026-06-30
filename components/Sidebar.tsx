@@ -5,11 +5,14 @@ import { signOut } from "@/app/auth/actions";
 
 export type NavKey =
   | "dashboard"
+  | "digest"
   | "watchlist"
   | "journal"
   | "analytics"
+  | "conviction"
   | "sentiment"
   | "risk"
+  | "stress-test"
   | "calendar"
   | "committee"
   | "admin";
@@ -97,6 +100,27 @@ function Icon({ name }: { name: NavKey | "logo" | "signout" }) {
           <line x1="16" y1="2" x2="16" y2="6" />
         </svg>
       );
+    case "digest":
+      return (
+        <svg {...common}>
+          <path d="M4 4h11l5 5v11a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1V5a1 1 0 0 1 1-1Z" />
+          <path d="M14 4v5h5" />
+          <path d="M7 13h8M7 17h5" />
+        </svg>
+      );
+    case "conviction":
+      return (
+        <svg {...common}>
+          <path d="M20.8 6.6a5 5 0 0 0-7.1 0L12 8.3l-1.7-1.7a5 5 0 1 0-7.1 7.1L12 22l8.8-8.3a5 5 0 0 0 0-7.1Z" />
+        </svg>
+      );
+    case "stress-test":
+      return (
+        <svg {...common}>
+          <path d="M3 13h3l2-7 4 14 2-7h2" />
+          <path d="M18 13h3" />
+        </svg>
+      );
     case "committee":
       return (
         <svg {...common}>
@@ -176,11 +200,14 @@ export default function Sidebar({
       {/* Nav */}
       <nav className="flex flex-1 flex-col gap-1">
         <NavItem href="/dashboard" label="Dashboard" icon="dashboard" active={active === "dashboard"} />
+        <NavItem href="/dashboard/digest" label="Morning Digest" icon="digest" active={active === "digest"} />
         <NavItem href="/dashboard#watchlist" label="Watchlist" icon="watchlist" active={active === "watchlist"} />
         <NavItem href="/dashboard/journal" label="Journal" icon="journal" active={active === "journal"} />
         <NavItem href="/dashboard/analytics" label="Analytics" icon="analytics" active={active === "analytics"} />
+        <NavItem href="/dashboard/conviction" label="Conviction" icon="conviction" active={active === "conviction"} />
         <NavItem href="/dashboard/sentiment" label="Market Pulse" icon="sentiment" active={active === "sentiment"} />
         <NavItem href="/dashboard/risk" label="Risk Simulator" icon="risk" active={active === "risk"} />
+        <NavItem href="/dashboard/stress-test" label="Stress Test" icon="stress-test" active={active === "stress-test"} />
         <NavItem href="/dashboard/calendar" label="Calendar" icon="calendar" active={active === "calendar"} />
         <NavItem href="/dashboard/committee" label="Committee" icon="committee" active={active === "committee"} />
         {isAdmin && (
