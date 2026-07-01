@@ -121,34 +121,36 @@ export async function exportCommitteePdf(
   y += 4;
 
   for (const persona of result.personas) {
-    guard(80);
+    guard(90);
 
     const rgb = verdictRgb(persona.verdict);
 
-    // Name (single column, left-aligned)
+    // Name (single column, left-aligned, wrapped to content width)
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(20, 20, 20);
-    doc.text(persona.name, M, y);
-    y += 13;
+    const nameLines = doc.splitTextToSize(persona.name, CW) as string[];
+    doc.text(nameLines, M, y);
+    y += nameLines.length * 14;
 
     // Role
     doc.setFontSize(8.5);
     doc.setFont("helvetica", "normal");
     doc.setTextColor(140, 140, 140);
-    doc.text(persona.role, M, y);
-    y += 13;
+    const roleLines = doc.splitTextToSize(persona.role, CW) as string[];
+    doc.text(roleLines, M, y);
+    y += roleLines.length * 12;
 
     // Verdict + confidence on its own line, left-aligned and colored
     doc.setFontSize(9);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(...rgb);
-    doc.text(
+    const vLines = doc.splitTextToSize(
       `${verdictStr(persona.verdict)}  ·  Confidence ${persona.confidence}/10`,
-      M,
-      y
-    );
-    y += 15;
+      CW
+    ) as string[];
+    doc.text(vLines, M, y);
+    y += vLines.length * 13 + 3;
 
     // Reasoning
     const lines = body(persona.reasoning, { size: 9.5, color: [70, 70, 70] });
@@ -175,18 +177,19 @@ export async function exportCommitteePdf(
   doc.setFontSize(13);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(20, 20, 20);
-  doc.text("The Chairman  ·  Final Synthesis", M, y);
-  y += 18;
+  const titleLines = doc.splitTextToSize("The Chairman  ·  Final Synthesis", CW) as string[];
+  doc.text(titleLines, M, y);
+  y += titleLines.length * 16 + 2;
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...cRgb);
-  doc.text(
+  const cvLines = doc.splitTextToSize(
     `${verdictStr(result.chairman.verdict)}  ·  Score ${result.chairman.overallScore}/100`,
-    M,
-    y
-  );
-  y += 20;
+    CW
+  ) as string[];
+  doc.text(cvLines, M, y);
+  y += cvLines.length * 15 + 5;
 
   label("Recommendation");
   doc.setFontSize(11);
