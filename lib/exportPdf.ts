@@ -6,9 +6,11 @@ const M  = 56;    // margin
 const CW = PW - M * 2; // content width
 
 function verdictStr(v: Verdict) {
-  if (v === "BULLISH") return "▲ BULLISH";
-  if (v === "BEARISH") return "▼ BEARISH";
-  return "■ NEUTRAL";
+  // Plain text only — jsPDF's standard font can't measure/render glyphs like
+  // ▲▼■, which breaks width math and causes right-aligned text to overflow.
+  if (v === "BULLISH") return "BULLISH";
+  if (v === "BEARISH") return "BEARISH";
+  return "NEUTRAL";
 }
 
 function verdictRgb(v: Verdict): [number, number, number] {
@@ -123,21 +125,11 @@ export async function exportCommitteePdf(
 
     const rgb = verdictRgb(persona.verdict);
 
-    // Name row
+    // Name (single column, left-aligned)
     doc.setFontSize(11);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(20, 20, 20);
     doc.text(persona.name, M, y);
-
-    doc.setFontSize(9);
-    doc.setFont("helvetica", "bold");
-    doc.setTextColor(...rgb);
-    doc.text(
-      `${verdictStr(persona.verdict)}  ·  Confidence ${persona.confidence}/10`,
-      PW - M,
-      y,
-      { align: "right" }
-    );
     y += 13;
 
     // Role
@@ -145,7 +137,18 @@ export async function exportCommitteePdf(
     doc.setFont("helvetica", "normal");
     doc.setTextColor(140, 140, 140);
     doc.text(persona.role, M, y);
-    y += 14;
+    y += 13;
+
+    // Verdict + confidence on its own line, left-aligned and colored
+    doc.setFontSize(9);
+    doc.setFont("helvetica", "bold");
+    doc.setTextColor(...rgb);
+    doc.text(
+      `${verdictStr(persona.verdict)}  ·  Confidence ${persona.confidence}/10`,
+      M,
+      y
+    );
+    y += 15;
 
     // Reasoning
     const lines = body(persona.reasoning, { size: 9.5, color: [70, 70, 70] });
@@ -172,16 +175,16 @@ export async function exportCommitteePdf(
   doc.setFontSize(13);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(20, 20, 20);
-  doc.text("⚖  The Chairman  ·  Final Synthesis", M, y);
+  doc.text("The Chairman  ·  Final Synthesis", M, y);
+  y += 18;
 
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...cRgb);
   doc.text(
     `${verdictStr(result.chairman.verdict)}  ·  Score ${result.chairman.overallScore}/100`,
-    PW - M,
-    y,
-    { align: "right" }
+    M,
+    y
   );
   y += 20;
 
