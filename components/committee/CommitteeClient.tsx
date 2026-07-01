@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import type { CommitteeResult } from "@/lib/committee-types";
+import { firstTicker } from "@/lib/tickers";
 import PersonaCard from "./PersonaCard";
 import VerdictBadge from "./VerdictBadge";
 import Spinner from "@/components/Spinner";
@@ -79,11 +80,11 @@ export default function CommitteeClient({ userId }: { userId: string }) {
     if (!result) return;
     setSaving(true);
     setHistoryError("");
-    const { error } = await supabase.from("committee_analyses").insert({
-      user_id: userId,
-      thesis,
-      result,
-    });
+    const { data, error } = await supabase
+      .from("committee_analyses")
+      .insert({ user_id: userId, thesis, result })
+      .select("id")
+      .single();
     setSaving(false);
     if (error) {
       setHistoryError(error.message);
@@ -91,6 +92,28 @@ export default function CommitteeClient({ userId }: { userId: string }) {
     }
     setSaved(true);
     loadHistory();
+
+    // Snapshot the price for the Track Record page (best-effort; never blocks save).
+    const ticker = firstTicker(thesis);
+    if (ticker && data?.id) {
+      try {
+        const res = await fetch(`/api/stock/${ticker}`);
+        if (res.ok) {
+          const json = await res.json();
+          const price = json.quote?.price;
+          if (typeof price === "number" && price > 0) {
+            await supabase.from("track_record_snapshots").insert({
+              user_id: userId,
+              analysis_id: data.id,
+              ticker,
+              price_at_submission: price,
+            });
+          }
+        }
+      } catch {
+        /* snapshot is non-critical */
+      }
+    }
   }
 
   function openSaved(a: SavedAnalysis) {

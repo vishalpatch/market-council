@@ -2,7 +2,6 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
-import StockSearch from "@/components/StockSearch";
 import WatchlistSection from "@/components/watchlist/WatchlistSection";
 
 export default async function DashboardPage() {
@@ -58,19 +57,6 @@ export default async function DashboardPage() {
             </p>
           </div>
           <WatchlistSection userId={user.id} />
-        </section>
-
-        {/* Stock lookup */}
-        <section className="mb-20">
-          <div className="mb-8 flex items-baseline justify-between border-b border-hairline pb-4">
-            <h2 className="font-serif text-3xl font-light tracking-editorial">
-              Market Lookup
-            </h2>
-            <p className="text-xs uppercase tracking-[0.15em] text-faint">
-              Price · Fundamentals · News
-            </p>
-          </div>
-          <StockSearch />
         </section>
 
         {/* CTAs */}
