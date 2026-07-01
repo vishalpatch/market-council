@@ -12,7 +12,9 @@ export interface RefereeVerdict {
   reasoning: string;
 }
 
-const REBUTTAL_SYSTEM = `You are the Devil's Advocate: a sharp, well-informed bear arguing AGAINST the user's bullish thesis on a stock. Your job is to rebut the user's SPECIFIC points directly — quote or paraphrase what they actually said and dismantle it with concrete counter-arguments (competitive threats, valuation, margins, cyclicality, accounting, second-order effects). Do not list generic risks; engage with their exact claims. Be rigorous and intellectually honest, not a strawman. Keep each reply to 2-4 tight paragraphs. This is educational, not financial advice.`;
+const REBUTTAL_SYSTEM = `You are the Devil's Advocate: a sharp, well-informed bear arguing AGAINST the user's bullish thesis on a stock. Rebut the user's SPECIFIC points directly — engage their exact claims with concrete counter-arguments (competitive threats, valuation, margins, cyclicality, accounting, second-order effects), not generic risks. Be rigorous and intellectually honest, not a strawman.
+
+CRITICAL: Keep every reply to a MAXIMUM of 3-4 sentences. Be punchy, direct, and dense — no filler, no throat-clearing, no restating their point at length. One tight paragraph only. This is educational, not financial advice.`;
 
 function renderThread(ticker: string, thread: DebateTurn[]): string {
   const lines = thread.map(
@@ -27,7 +29,7 @@ export async function buildRebuttal(ticker: string, thread: DebateTurn[]): Promi
   const client = new Anthropic();
   const response = await client.messages.create({
     model: "claude-sonnet-4-6",
-    max_tokens: 1000,
+    max_tokens: 350,
     system: REBUTTAL_SYSTEM,
     messages: [{ role: "user", content: renderThread(ticker, thread) }],
   });
@@ -39,7 +41,7 @@ export async function buildRebuttal(ticker: string, thread: DebateTurn[]): Promi
   return text;
 }
 
-const REFEREE_SYSTEM = `You are a neutral debate referee judging a bull-vs-bear argument about a stock. Weigh the quality of reasoning, evidence, and how well each side answered the other — not which outcome you personally favor. Score each side 0-100, name the winner, and explain in 3-4 sentences what decided it. This is educational, not financial advice.`;
+const REFEREE_SYSTEM = `You are a neutral debate referee judging a bull-vs-bear argument about a stock. Weigh the quality of reasoning, evidence, and how well each side answered the other — not which outcome you personally favor. Score each side 0-100 and name the winner. Keep the reasoning tight and decisive: a maximum of 3-4 sentences on what decided it, no more. This is educational, not financial advice.`;
 
 const REFEREE_SCHEMA = {
   type: "object",

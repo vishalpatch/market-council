@@ -189,8 +189,9 @@ export async function exportCommitteePdf(
   doc.setFontSize(11);
   doc.setFont("helvetica", "bold");
   doc.setTextColor(...cRgb);
-  doc.text(result.chairman.recommendation, M, y);
-  y += 18;
+  const recLines = doc.splitTextToSize(result.chairman.recommendation, CW) as string[];
+  doc.text(recLines, M, y);
+  y += recLines.length * 15 + 6;
 
   label("Summary");
   const chairLines = body(result.chairman.summary, {
@@ -202,15 +203,15 @@ export async function exportCommitteePdf(
   rule();
 
   // ── Disclaimer ────────────────────────────────────────────────────────
-  guard(20);
+  guard(28);
   doc.setFontSize(7.5);
   doc.setFont("helvetica", "normal");
   doc.setTextColor(180, 180, 180);
-  doc.text(
+  const discLines = doc.splitTextToSize(
     "For informational and educational purposes only. Not financial advice. Past AI analysis does not guarantee future results.",
-    M,
-    y
-  );
+    CW
+  ) as string[];
+  doc.text(discLines, M, y);
 
   const filename = `market-council-report-${new Date().toISOString().slice(0, 10)}.pdf`;
   doc.save(filename);

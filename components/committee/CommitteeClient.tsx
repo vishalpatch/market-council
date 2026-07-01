@@ -176,6 +176,9 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <p className="text-zinc-200">{result.thesisSummary}</p>
             </div>
 
+            {/* Chairman — the headline verdict, shown first */}
+            <ChairmanCard result={result} />
+
             {/* Personas */}
             <div>
               <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
@@ -187,9 +190,6 @@ export default function CommitteeClient({ userId }: { userId: string }) {
                 ))}
               </div>
             </div>
-
-            {/* Chairman */}
-            <ChairmanCard result={result} />
 
             {/* Save + Export */}
             <div className="flex flex-wrap items-center gap-3">
