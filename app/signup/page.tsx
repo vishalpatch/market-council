@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
+import { isPasswordPwned } from "@/lib/pwned";
 
 export default function SignupPage() {
   const [fullName, setFullName] = useState("");
@@ -12,53 +12,39 @@ export default function SignupPage() {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
 
-  const supabase = useMemo(
-    () =>
-      createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      ),
-    []
-  );
-
-  useEffect(() => {
-    const url = process.env.NEXT_PUBLIC_SUPABASE_URL;
-    const key = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY;
-    console.log("[market-council] NEXT_PUBLIC_SUPABASE_URL:", url ? `${url.slice(0, 20)}…` : "UNDEFINED");
-    console.log("[market-council] NEXT_PUBLIC_SUPABASE_ANON_KEY:", key ? `${key.slice(0, 10)}…` : "UNDEFINED");
-  }, []);
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    console.log("[market-council] attempting signUp for:", email);
-
-    const { error } = await supabase.auth.signUp({
-      email,
-      password,
-      options: {
-        data: { full_name: fullName },
-      },
-    });
-
-    if (error) {
-      console.error("[market-council] signUp error:", {
-        message: error.message,
-        status: error.status,
-        name: error.name,
-        full: JSON.stringify(error),
-      });
-      setError(error.message);
+    // 1. Leaked-password check (privacy-preserving, client-side k-anonymity).
+    if (await isPasswordPwned(password)) {
+      setError(
+        "This password has appeared in known data breaches. Please choose a different one."
+      );
       setLoading(false);
       return;
     }
 
-    console.log("[market-council] signUp succeeded");
-
-    setSuccess(true);
-    setLoading(false);
+    // 2. Create the account via the rate-limited server endpoint.
+    try {
+      const res = await fetch("/api/auth/signup", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password, fullName }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error ?? "Sign up failed.");
+        setLoading(false);
+        return;
+      }
+      setSuccess(true);
+      setLoading(false);
+    } catch {
+      setError("Network error. Please try again.");
+      setLoading(false);
+    }
   }
 
   if (success) {
@@ -98,7 +84,6 @@ export default function SignupPage() {
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink px-4 py-12 text-paper editorial-vignette">
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <Link href="/" className="mb-12 flex items-center justify-center gap-2.5">
           <span className="flex h-7 w-7 items-center justify-center text-gold">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
@@ -161,7 +146,9 @@ export default function SignupPage() {
               placeholder="••••••••"
               className="w-full border-b border-hairline-strong bg-transparent py-2.5 text-paper placeholder-faint transition-colors focus:border-gold focus:outline-none"
             />
-            <p className="mt-2 text-xs text-faint">Minimum 6 characters</p>
+            <p className="mt-2 text-xs text-faint">
+              Minimum 6 characters · checked against known breaches
+            </p>
           </div>
 
           {error && (

@@ -1,8 +1,7 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { createBrowserClient } from "@supabase/ssr";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -10,36 +9,34 @@ export default function LoginPage() {
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
 
-  const supabase = useMemo(
-    () =>
-      createBrowserClient(
-        process.env.NEXT_PUBLIC_SUPABASE_URL!,
-        process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
-      ),
-    []
-  );
-
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setLoading(true);
     setError("");
 
-    const { error } = await supabase.auth.signInWithPassword({ email, password });
-
-    if (error) {
-      setError(error.message);
+    try {
+      const res = await fetch("/api/auth/login", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password }),
+      });
+      const json = await res.json();
+      if (!res.ok) {
+        setError(json.error ?? "Sign in failed.");
+        setLoading(false);
+        return;
+      }
+      // Hard redirect so the server re-reads the fresh session cookie.
+      window.location.href = "/dashboard";
+    } catch {
+      setError("Network error. Please try again.");
       setLoading(false);
-      return;
     }
-
-    // Hard redirect so the server re-reads the fresh session cookie
-    window.location.href = "/dashboard";
   }
 
   return (
     <div className="flex min-h-screen items-center justify-center bg-ink px-4 text-paper editorial-vignette">
       <div className="w-full max-w-sm">
-        {/* Logo */}
         <Link href="/" className="mb-12 flex items-center justify-center gap-2.5">
           <span className="flex h-7 w-7 items-center justify-center text-gold">
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
