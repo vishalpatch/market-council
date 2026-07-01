@@ -4,6 +4,7 @@ import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import WatchlistSection from "@/components/watchlist/WatchlistSection";
 import OnboardingChecklist from "@/components/onboarding/OnboardingChecklist";
+import UpgradeToast from "@/components/UpgradeToast";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -18,6 +19,7 @@ export default async function DashboardPage() {
   return (
     <AppShell active="dashboard" userEmail={user.email}>
       <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
+        <UpgradeToast />
         <OnboardingChecklist />
 
         {/* Masthead */}

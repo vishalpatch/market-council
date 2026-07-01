@@ -23,8 +23,14 @@ export default function Header() {
 
         <nav className="flex items-center gap-6 text-sm">
           <Link
-            href="/login"
+            href="/pricing"
             className="text-muted transition-colors hover:text-paper"
+          >
+            Pricing
+          </Link>
+          <Link
+            href="/login"
+            className="hidden text-muted transition-colors hover:text-paper sm:block"
           >
             Sign In
           </Link>

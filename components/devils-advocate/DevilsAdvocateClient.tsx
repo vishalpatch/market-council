@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { createClient } from "@/lib/supabase/client";
 import Spinner from "@/components/Spinner";
+import UpgradeModal from "@/components/UpgradeModal";
 
 interface Turn {
   role: "bull" | "bear";
@@ -29,10 +30,16 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
   const [phase, setPhase] = useState<"setup" | "debating" | "done">("setup");
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
+  const [upgradeMsg, setUpgradeMsg] = useState("");
   const [verdict, setVerdict] = useState<Verdict | null>(null);
 
   const bearReplies = thread.filter((t) => t.role === "bear").length;
   const maxedOut = bearReplies >= MAX_ROUNDS;
+
+  function showError(err: unknown, fallback: string) {
+    const m = err instanceof Error ? err.message : fallback;
+    if (m !== "__upgrade__") setError(m);
+  }
 
   async function callApi(mode: "debate" | "referee", nextThread: Turn[]) {
     const res = await fetch("/api/devils-advocate", {
@@ -41,7 +48,13 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
       body: JSON.stringify({ ticker: ticker.trim().toUpperCase(), mode, thread: nextThread }),
     });
     const json = await res.json();
-    if (!res.ok) throw new Error(json.error ?? "Request failed.");
+    if (!res.ok) {
+      if (res.status === 402) {
+        setUpgradeMsg(json.error ?? "Upgrade to continue.");
+        throw new Error("__upgrade__");
+      }
+      throw new Error(json.error ?? "Request failed.");
+    }
     return json;
   }
 
@@ -56,7 +69,7 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
       setThread([...next, { role: "bear", text }]);
       setPhase("debating");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to start.");
+      showError(err, "Failed to start.");
     } finally {
       setLoading(false);
     }
@@ -73,7 +86,7 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
       const { text } = await callApi("debate", next);
       setThread([...next, { role: "bear", text }]);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to respond.");
+      showError(err, "Failed to respond.");
     } finally {
       setLoading(false);
     }
@@ -95,7 +108,7 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
           referee_verdict: v,
         });
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Failed to judge.");
+      showError(err, "Failed to judge.");
     } finally {
       setLoading(false);
     }
@@ -113,6 +126,7 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
 
   return (
     <div>
+      <UpgradeModal open={!!upgradeMsg} message={upgradeMsg} onClose={() => setUpgradeMsg("")} />
       <p className="mb-8 text-xs text-muted">Powered by Claude</p>
 
       {phase === "setup" && (

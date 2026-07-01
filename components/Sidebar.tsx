@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { signOut } from "@/app/auth/actions";
 import ThemeToggle from "./ThemeToggle";
+import UsageMeter from "./UsageMeter";
 
 export type NavKey =
   | "dashboard"
@@ -17,6 +18,7 @@ export type NavKey =
   | "watchlist"
   | "risk"
   | "stress-test"
+  | "team"
   | "journal"
   | "analytics"
   | "conviction"
@@ -130,6 +132,14 @@ function Icon({ name }: { name: IconName }) {
           <path d="M18 13h3" />
         </svg>
       );
+    case "team":
+      return (
+        <svg {...common}>
+          <path d="M17 20v-2a4 4 0 0 0-4-4H7a4 4 0 0 0-4 4v2" />
+          <circle cx="10" cy="7" r="4" />
+          <path d="M21 20v-1.5a4 4 0 0 0-3-3.85M16 3.15a4 4 0 0 1 0 7.7" />
+        </svg>
+      );
     case "journal":
       return (
         <svg {...common}>
@@ -201,6 +211,7 @@ const GROUPS: { label: string; items: Item[] }[] = [
       { key: "watchlist", href: "/dashboard#watchlist", label: "Watchlist", icon: "watchlist" },
       { key: "risk", href: "/dashboard/risk", label: "Risk Simulator", icon: "risk" },
       { key: "stress-test", href: "/dashboard/stress-test", label: "Stress Test", icon: "stress-test" },
+      { key: "team", href: "/dashboard/team", label: "Team", icon: "team" },
     ],
   },
   {
@@ -285,6 +296,9 @@ export default function Sidebar({
           </div>
         )}
       </nav>
+
+      {/* Usage meter */}
+      <UsageMeter />
 
       {/* Theme toggle */}
       <div className="mt-3 border-t border-hairline/60 pt-3">

@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { createClient } from "@/lib/supabase/server";
+import { createAdminClient } from "@/lib/supabase/admin";
 import { rateLimit, clientIp } from "@/lib/rate-limit";
 
 export const runtime = "nodejs";
@@ -43,13 +44,33 @@ export async function POST(req: Request) {
   }
 
   const supabase = await createClient();
-  const { error } = await supabase.auth.signUp({
+  const { data, error } = await supabase.auth.signUp({
     email: em,
     password: pw,
     options: { data: { full_name: name } },
   });
   if (error) {
     return NextResponse.json({ error: error.message }, { status: 400 });
+  }
+
+  // Give every new user a Free subscription record up front.
+  if (data.user?.id) {
+    try {
+      await createAdminClient()
+        .from("subscriptions")
+        .upsert(
+          {
+            user_id: data.user.id,
+            plan: "free",
+            status: "active",
+            ai_model: null,
+            monthly_ai_limit: 0,
+          },
+          { onConflict: "user_id" }
+        );
+    } catch {
+      /* non-critical */
+    }
   }
 
   return NextResponse.json({ ok: true });

@@ -2,6 +2,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { createAdminClient } from "@/lib/supabase/admin";
 import AppShell from "@/components/AppShell";
+import AdminPromoCodes from "@/components/admin/AdminPromoCodes";
 import { isAdminEmail } from "@/lib/is-admin";
 
 export default async function AdminPage() {
@@ -113,6 +114,10 @@ export default async function AdminPage() {
             </table>
           </div>
         </section>
+
+        <div className="mt-20">
+          <AdminPromoCodes />
+        </div>
       </main>
     </AppShell>
   );

@@ -7,6 +7,7 @@ import { firstTicker } from "@/lib/tickers";
 import PersonaCard from "./PersonaCard";
 import VerdictBadge from "./VerdictBadge";
 import Spinner from "@/components/Spinner";
+import UpgradeModal from "@/components/UpgradeModal";
 
 interface SavedAnalysis {
   id: string;
@@ -26,6 +27,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
   const [saved, setSaved] = useState(false);
   const [history, setHistory] = useState<SavedAnalysis[]>([]);
   const [historyError, setHistoryError] = useState("");
+  const [upgradeMsg, setUpgradeMsg] = useState("");
 
   const supabase = createClient();
 
@@ -64,6 +66,10 @@ export default function CommitteeClient({ userId }: { userId: string }) {
       });
       const json = await res.json();
       if (!res.ok) {
+        if (res.status === 402) {
+          setUpgradeMsg(json.error ?? "Upgrade to continue.");
+          return;
+        }
         setError(json.error ?? "The committee could not convene.");
         return;
       }
@@ -126,6 +132,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
 
   return (
     <div className="grid gap-8 lg:grid-cols-[1fr_300px]">
+      <UpgradeModal open={!!upgradeMsg} message={upgradeMsg} onClose={() => setUpgradeMsg("")} />
       <div>
         {/* Input */}
         <form onSubmit={handleSubmit} className="mb-8">

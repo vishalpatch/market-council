@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 import { buildRebuttal, judgeDebate, type DebateTurn } from "@/lib/devils-advocate";
 import { getSessionUser } from "@/lib/auth";
 import { sanitizeTicker, sanitizeText } from "@/lib/sanitize";
+import { checkAIUsage, recordAIUsage } from "@/lib/usage";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
@@ -42,7 +43,28 @@ export async function POST(req: Request) {
       return NextResponse.json({ verdict });
     }
 
+    // One "debate" counts against the monthly limit at its start (opening thesis
+    // only). Continuation rebuttals and the referee don't count again.
+    const isStart = thread.length === 1;
+    if (isStart) {
+      const usage = await checkAIUsage(user.id, "devils_advocate");
+      if (!usage.allowed) {
+        return NextResponse.json(
+          {
+            error:
+              usage.reason === "free"
+                ? "Devil's Advocate is a paid feature. Upgrade to start debating."
+                : `You've used all ${usage.limit} Devil's Advocate debates this month. Upgrade for more or wait until your next billing date.`,
+            upgrade: true,
+            usage,
+          },
+          { status: 402 }
+        );
+      }
+    }
+
     const text = await buildRebuttal(ticker, thread);
+    if (isStart) await recordAIUsage(user.id, "devils_advocate");
     return NextResponse.json({ text });
   } catch (err) {
     console.error("[devils-advocate] error:", err);

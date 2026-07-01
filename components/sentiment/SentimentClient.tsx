@@ -4,6 +4,7 @@ import { useState } from "react";
 import Spinner from "@/components/Spinner";
 import VerdictBadge from "@/components/committee/VerdictBadge";
 import NewsFeed, { type NewsItem } from "@/components/stock/NewsFeed";
+import UpgradeModal from "@/components/UpgradeModal";
 import type { SentimentResult } from "@/lib/sentiment-types";
 
 interface Analysis {
@@ -24,6 +25,7 @@ export default function SentimentClient() {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [result, setResult] = useState<Analysis | null>(null);
+  const [upgradeMsg, setUpgradeMsg] = useState("");
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -42,6 +44,10 @@ export default function SentimentClient() {
       });
       const json = await res.json();
       if (!res.ok) {
+        if (res.status === 402) {
+          setUpgradeMsg(json.error ?? "Upgrade to continue.");
+          return;
+        }
         setError(json.error ?? "Could not analyze sentiment.");
         return;
       }
@@ -55,6 +61,7 @@ export default function SentimentClient() {
 
   return (
     <div>
+      <UpgradeModal open={!!upgradeMsg} message={upgradeMsg} onClose={() => setUpgradeMsg("")} />
       {/* Ticker input */}
       <form onSubmit={handleSubmit} className="mb-10 flex gap-3">
         <input
