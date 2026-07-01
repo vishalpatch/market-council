@@ -26,7 +26,7 @@ const num = (s: string) => {
 const pct = (n: number) => `${n >= 0 ? "+" : ""}${n.toFixed(2)}%`;
 
 const inputCls =
-  "w-full rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-2.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
+  "w-full rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-2.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
 const labelCls = "mb-1.5 block text-xs uppercase tracking-[0.15em] text-faint";
 
 function Field({
@@ -319,7 +319,7 @@ export default function RiskClient() {
               </ResponsiveContainer>
             </div>
 
-            <div className="self-center">
+            <div className="self-center overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-hairline text-left">
@@ -399,10 +399,10 @@ function StressTooltip({ active, payload }: StressTooltipProps) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.1] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
-      <p className="mb-0.5 text-zinc-400">{p.label} move</p>
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
+      <p className="mb-0.5 text-muted">{p.label} move</p>
       <p className="font-mono font-semibold text-[#cb7e68]">−{formatPrice(p.loss)}</p>
-      <p className="font-mono text-zinc-400">{formatPrice(p.remaining)} left</p>
+      <p className="font-mono text-muted">{formatPrice(p.remaining)} left</p>
     </div>
   );
 }

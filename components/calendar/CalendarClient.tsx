@@ -219,7 +219,7 @@ export default function CalendarClient({ userId }: { userId: string }) {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search company or ticker…"
-            className="w-full rounded-full border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-1.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none"
+            className="w-full rounded-full border border-[var(--edge)] bg-[var(--surface)] px-4 py-1.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none"
           />
           {query && (
             <button
@@ -246,7 +246,7 @@ export default function CalendarClient({ userId }: { userId: string }) {
       )}
 
       {!loading && !error && data && groups.length === 0 && (
-        <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+        <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
           <h2 className="mb-3 font-serif text-2xl font-light">
             {filtersActive ? "No matches" : "Nothing major in this window"}
           </h2>
@@ -319,7 +319,7 @@ function CatalystRow({
   onToggle: () => void;
 }) {
   return (
-    <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
+    <div className="flex flex-wrap items-center gap-4 rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
       <div className="min-w-0 flex-1">
         <div className="mb-1 flex flex-wrap items-center gap-2">
           <TypeTag kind={catalyst.kind} />
@@ -332,7 +332,7 @@ function CatalystRow({
               {catalyst.symbol}
             </span>
           )}
-          <span className="rounded-md bg-[#ece6d9]/[0.06] px-2 py-0.5 font-mono text-xs text-muted">
+          <span className="rounded-md bg-[var(--surface-3)] px-2 py-0.5 font-mono text-xs text-muted">
             {catalyst.symbol}
           </span>
           {catalyst.kind === "earnings" && watching && (

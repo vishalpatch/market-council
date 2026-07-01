@@ -43,8 +43,8 @@ function ChartTooltip({ active, payload, label }: TooltipProps) {
   if (!active || !payload?.length) return null;
   const v = payload[0].value;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.1] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
-      <p className="mb-0.5 text-zinc-400">{label}</p>
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
+      <p className="mb-0.5 text-muted">{label}</p>
       <p className="font-mono font-semibold text-[#c8a45d]">
         {v} {v === 1 ? "entry" : "entries"}
       </p>
@@ -134,7 +134,7 @@ export default function AnalyticsClient() {
 
   if (stats.total === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
         <h2 className="mb-3 font-serif text-2xl font-light">No data to analyze yet</h2>
         <p className="mx-auto mb-8 max-w-sm text-pretty leading-relaxed text-muted">
           Your analytics are built from your trade journal. Log a few investment
@@ -254,7 +254,7 @@ export default function AnalyticsClient() {
               </div>
 
               {/* Proportion bar */}
-              <div className="mt-8 flex h-2.5 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+              <div className="mt-8 flex h-2.5 w-full overflow-hidden rounded-full bg-[var(--surface-3)]">
                 {[
                   { value: stats.wins, color: UP },
                   { value: stats.losses, color: DOWN },

@@ -12,7 +12,7 @@ export default async function ExplorerPage() {
 
   return (
     <AppShell active="explorer" userEmail={user.email}>
-      <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
+      <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
         <header className="mb-12 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Stock Explorer</p>
           <h1 className="font-serif text-5xl font-light leading-tight tracking-editorial">

@@ -14,7 +14,7 @@ export default async function StressTestPage() {
 
   return (
     <AppShell active="stress-test" userEmail={user.email}>
-      <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
+      <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
         <header className="mb-16 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">
             Portfolio Stress Test

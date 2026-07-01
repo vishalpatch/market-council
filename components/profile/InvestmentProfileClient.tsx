@@ -58,7 +58,7 @@ export default function InvestmentProfileClient() {
 
   if (!data.enough) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
         <h2 className="mb-3 font-serif text-2xl font-light">Not enough signal yet</h2>
         <p className="mx-auto mb-8 max-w-md text-pretty leading-relaxed text-muted">
           Your profile is inferred entirely from how you use Market Council — the
@@ -82,7 +82,7 @@ export default function InvestmentProfileClient() {
   return (
     <div className="space-y-10">
       {/* Hero profile card */}
-      <div className="overflow-hidden rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/[0.08] via-[#ece6d9]/[0.02] to-transparent p-8 sm:p-10">
+      <div className="overflow-hidden rounded-3xl border border-gold/30 bg-gradient-to-br from-gold/[0.08] via-[var(--surface)] to-transparent p-8 sm:p-10">
         <p className="mb-2 text-xs uppercase tracking-[0.25em] text-gold">Your investing style</p>
         <h2 className="font-serif text-5xl font-light tracking-editorial text-paper sm:text-6xl">
           The {style?.label}
@@ -113,10 +113,10 @@ export default function InvestmentProfileClient() {
           {insights?.map((t, i) => (
             <div
               key={i}
-              className="flex gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5"
+              className="flex gap-4 rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5"
             >
               <span className="font-serif text-2xl font-light text-gold">{i + 1}</span>
-              <p className="self-center text-pretty leading-relaxed text-zinc-300">{t}</p>
+              <p className="self-center text-pretty leading-relaxed text-muted">{t}</p>
             </div>
           ))}
         </div>

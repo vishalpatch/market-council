@@ -165,20 +165,20 @@ export default function CandlestickChart({
       {/* Tooltip */}
       {hovered && hover !== null && (
         <div
-          className="pointer-events-none absolute top-2 rounded-lg border border-[#ece6d9]/[0.08] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl"
+          className="pointer-events-none absolute top-2 rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl"
           style={{
             left: Math.min(Math.max(x(hover) - 70, 0), width - 150),
           }}
         >
-          <p className="mb-1 font-medium text-zinc-300">{hovered.fullLabel}</p>
+          <p className="mb-1 font-medium text-muted">{hovered.fullLabel}</p>
           <div className="grid grid-cols-2 gap-x-4 gap-y-0.5 font-mono text-[11px]">
-            <span className="text-zinc-500">O</span>
-            <span className="text-right text-zinc-200">{formatPrice(hovered.open, currency)}</span>
-            <span className="text-zinc-500">H</span>
-            <span className="text-right text-zinc-200">{formatPrice(hovered.high, currency)}</span>
-            <span className="text-zinc-500">L</span>
-            <span className="text-right text-zinc-200">{formatPrice(hovered.low, currency)}</span>
-            <span className="text-zinc-500">C</span>
+            <span className="text-muted">O</span>
+            <span className="text-right text-paper">{formatPrice(hovered.open, currency)}</span>
+            <span className="text-muted">H</span>
+            <span className="text-right text-paper">{formatPrice(hovered.high, currency)}</span>
+            <span className="text-muted">L</span>
+            <span className="text-right text-paper">{formatPrice(hovered.low, currency)}</span>
+            <span className="text-muted">C</span>
             <span
               className="text-right font-medium"
               style={{ color: hovered.close >= hovered.open ? UP : DOWN }}

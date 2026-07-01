@@ -3,6 +3,7 @@ import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import AppShell from "@/components/AppShell";
 import WatchlistSection from "@/components/watchlist/WatchlistSection";
+import OnboardingChecklist from "@/components/onboarding/OnboardingChecklist";
 
 export default async function DashboardPage() {
   const supabase = await createClient();
@@ -16,7 +17,9 @@ export default async function DashboardPage() {
 
   return (
     <AppShell active="dashboard" userEmail={user.email}>
-      <main className="mx-auto max-w-5xl px-8 py-16 lg:px-12">
+      <main className="mx-auto max-w-5xl px-5 py-10 sm:px-8 sm:py-16 lg:px-12">
+        <OnboardingChecklist />
+
         {/* Masthead */}
         <header className="mb-20 border-b border-hairline pb-12">
           <p className="mb-4 text-xs uppercase tracking-[0.25em] text-gold">Dashboard</p>

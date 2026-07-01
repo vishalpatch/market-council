@@ -45,8 +45,8 @@ export default function MetricsGrid({
   return (
     <div className="grid grid-cols-2 gap-3 sm:grid-cols-3 lg:grid-cols-5">
       {/* Featured current price */}
-      <div className="col-span-2 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
-        <p className="mb-1 text-xs uppercase tracking-wider text-zinc-500">
+      <div className="col-span-2 rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
+        <p className="mb-1 text-xs uppercase tracking-wider text-muted">
           Current Price
         </p>
         <p
@@ -64,9 +64,9 @@ export default function MetricsGrid({
       {metrics.map((m) => (
         <div
           key={m.label}
-          className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
+          className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-4 backdrop-blur-xl transition-colors hover:border-[var(--edge-2)]"
         >
-          <p className="mb-1.5 text-xs uppercase tracking-wider text-zinc-500">
+          <p className="mb-1.5 text-xs uppercase tracking-wider text-muted">
             {m.label}
           </p>
           <p

@@ -3,7 +3,7 @@ import type { Verdict } from "@/lib/committee-types";
 const STYLES: Record<Verdict, string> = {
   BULLISH: "border-[#c8a45d]/40 bg-[#c8a45d]/10 text-[#c8a45d]",
   BEARISH: "border-[#cb7e68]/40 bg-[#cb7e68]/10 text-[#cb7e68]",
-  NEUTRAL: "border-zinc-600/50 bg-zinc-500/10 text-zinc-300",
+  NEUTRAL: "border-hairline-strong bg-zinc-500/10 text-muted",
 };
 
 const GLYPH: Record<Verdict, string> = {

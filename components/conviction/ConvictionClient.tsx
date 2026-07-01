@@ -146,7 +146,7 @@ export default function ConvictionClient() {
 
   if (stats.total === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
         <h2 className="mb-3 font-serif text-2xl font-light">No analyses to track yet</h2>
         <p className="mx-auto max-w-sm text-pretty leading-relaxed text-muted">
           Convene the committee on a few theses and save them — this page then tracks
@@ -178,7 +178,7 @@ export default function ConvictionClient() {
       <div className="grid gap-12 lg:grid-cols-2">
         <section>
           <SectionHeading title="Directional bias" note="Across saved theses" />
-          <div className="mb-3 flex h-2.5 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+          <div className="mb-3 flex h-2.5 w-full overflow-hidden rounded-full bg-[var(--surface-3)]">
             {[
               { v: stats.bull, c: GOLD },
               { v: stats.neutral, c: "rgba(155,148,134,0.5)" },
@@ -205,7 +205,7 @@ export default function ConvictionClient() {
               {stats.topTickers.map(([t, n]) => (
                 <div key={t} className="flex items-center gap-3">
                   <span className="w-16 font-mono text-sm text-paper">{t}</span>
-                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+                  <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-[var(--surface-3)]">
                     <div
                       className="h-full rounded-full bg-gold"
                       style={{ width: `${(n / stats.topTickers[0][1]) * 100}%` }}
@@ -271,7 +271,7 @@ function AnalysisCard({
   const score = analysis.result?.chairman?.overallScore ?? 0;
 
   return (
-    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
+    <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
       <div className="mb-3 flex flex-wrap items-center gap-3">
         <VerdictBadge verdict={verdict} size="sm" />
         <span className="font-mono text-xs text-muted">{score}/100</span>
@@ -284,11 +284,11 @@ function AnalysisCard({
         </span>
       </div>
 
-      <p className="mb-4 text-sm leading-relaxed text-zinc-300">
+      <p className="mb-4 text-sm leading-relaxed text-muted">
         {analysis.result?.thesisSummary || analysis.thesis}
       </p>
 
-      <div className="flex flex-col gap-4 border-t border-[#ece6d9]/[0.06] pt-4 sm:flex-row sm:items-end">
+      <div className="flex flex-col gap-4 border-t border-[var(--edge)] pt-4 sm:flex-row sm:items-end">
         <div className="flex-1">
           <label className="mb-1.5 block text-[11px] uppercase tracking-wider text-faint">
             What happened?
@@ -301,7 +301,7 @@ function AnalysisCard({
             }}
             rows={2}
             placeholder="Note how this call played out…"
-            className="w-full resize-none rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-3 py-2 text-sm text-paper placeholder-faint focus:border-gold/50 focus:outline-none"
+            className="w-full resize-none rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-3 py-2 text-sm text-paper placeholder-faint focus:border-gold/50 focus:outline-none"
           />
         </div>
 
@@ -320,7 +320,7 @@ function AnalysisCard({
                 className={`rounded-full border px-3 py-1 text-xs font-semibold transition-colors ${
                   analysis.user_agreement === o.v
                     ? o.cls
-                    : "border-zinc-700 text-zinc-500 hover:text-zinc-300"
+                    : "border-hairline-strong text-muted hover:text-muted"
                 }`}
               >
                 {o.label}
@@ -362,8 +362,8 @@ function TimelineTooltip({ active, payload, label }: TimelineTooltipProps) {
   if (!active || !payload?.length) return null;
   const v = payload[0].value;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.1] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
-      <p className="mb-0.5 text-zinc-400">{label}</p>
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
+      <p className="mb-0.5 text-muted">{label}</p>
       <p className="font-mono font-semibold text-[#c8a45d]">
         {v} {v === 1 ? "analysis" : "analyses"}
       </p>

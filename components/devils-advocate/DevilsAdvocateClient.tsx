@@ -19,7 +19,7 @@ interface Verdict {
 const MAX_ROUNDS = 5;
 
 const inputCls =
-  "w-full rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-3 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
+  "w-full rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-3 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
 
 export default function DevilsAdvocateClient({ userId }: { userId: string }) {
   const [ticker, setTicker] = useState("");
@@ -231,8 +231,8 @@ function Bubble({ turn }: { turn: Turn }) {
       <div
         className={`max-w-[85%] rounded-2xl border p-4 text-sm leading-relaxed ${
           isBull
-            ? "border-gold/30 bg-gold/[0.06] text-zinc-200"
-            : "border-[#cb7e68]/30 bg-[#cb7e68]/[0.06] text-zinc-200"
+            ? "border-gold/30 bg-gold/[0.06] text-paper"
+            : "border-[#cb7e68]/30 bg-[#cb7e68]/[0.06] text-paper"
         }`}
       >
         <p
@@ -255,11 +255,11 @@ function RefereeCard({ verdict }: { verdict: Verdict }) {
     verdict.winner === "bull" ? "#c8a45d" : verdict.winner === "bear" ? "#cb7e68" : "#9b9486";
   return (
     <div
-      className="rounded-2xl border bg-[#ece6d9]/[0.02] p-6 backdrop-blur-xl"
+      className="rounded-2xl border bg-[var(--surface)] p-6 backdrop-blur-xl"
       style={{ borderColor: `${accent}40` }}
     >
       <div className="mb-5 flex items-center gap-3">
-        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ece6d9]/[0.04] text-xl">
+        <span className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--surface-2)] text-xl">
           ⚖️
         </span>
         <div>
@@ -276,7 +276,7 @@ function RefereeCard({ verdict }: { verdict: Verdict }) {
         <ScoreBar label="Bear" score={verdict.bearScore} color="#cb7e68" />
       </div>
 
-      <p className="text-sm leading-relaxed text-zinc-300">{verdict.reasoning}</p>
+      <p className="text-sm leading-relaxed text-muted">{verdict.reasoning}</p>
     </div>
   );
 }
@@ -290,7 +290,7 @@ function ScoreBar({ label, score, color }: { label: string; score: number; color
           {score}
         </span>
       </div>
-      <div className="h-2 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+      <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--surface-3)]">
         <div className="h-full rounded-full" style={{ width: `${score}%`, backgroundColor: color }} />
       </div>
     </div>

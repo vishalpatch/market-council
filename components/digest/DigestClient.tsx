@@ -112,7 +112,7 @@ export default function DigestClient() {
           {data.indices.map((idx) => (
             <div
               key={idx.symbol}
-              className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl"
+              className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl"
             >
               <div className="flex items-baseline justify-between">
                 <span className="font-serif text-lg font-light text-paper">{idx.name}</span>
@@ -144,7 +144,7 @@ export default function DigestClient() {
                 href={s.url}
                 target="_blank"
                 rel="noopener noreferrer"
-                className="group flex gap-4 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-gold/40"
+                className="group flex gap-4 rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-4 backdrop-blur-xl transition-all hover:-translate-y-0.5 hover:border-gold/40"
               >
                 {s.image && (
                   // eslint-disable-next-line @next/next/no-img-element
@@ -163,7 +163,7 @@ export default function DigestClient() {
                     <span>·</span>
                     <span>{formatRelativeDate(s.datetime)}</span>
                   </div>
-                  <h3 className="font-medium leading-snug text-zinc-100 transition-colors group-hover:text-gold">
+                  <h3 className="font-medium leading-snug text-paper transition-colors group-hover:text-gold">
                     {s.headline}
                   </h3>
                 </div>
@@ -180,7 +180,7 @@ export default function DigestClient() {
         </h2>
 
         {data.watchlistCount === 0 ? (
-          <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+          <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
             <h3 className="mb-3 font-serif text-2xl font-light">Your briefing is empty</h3>
             <p className="mx-auto mb-8 max-w-sm text-pretty leading-relaxed text-muted">
               Add tickers to your watchlist and each morning this page ranks them by
@@ -215,7 +215,7 @@ export default function DigestClient() {
 
 function FeedRow({ item }: { item: FeedItem }) {
   return (
-    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
+    <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
       <div className="flex flex-wrap items-center gap-3">
         <span className="font-mono text-base font-bold text-paper">{item.symbol}</span>
         <span className="min-w-0 flex-1 truncate text-sm text-muted">{item.name}</span>
@@ -250,7 +250,7 @@ function FeedRow({ item }: { item: FeedItem }) {
 
       {/* Headlines */}
       {item.headlines.length > 0 && (
-        <div className="mt-4 space-y-2 border-t border-[#ece6d9]/[0.06] pt-3">
+        <div className="mt-4 space-y-2 border-t border-[var(--edge)] pt-3">
           {item.headlines.map((h, i) => (
             <a
               key={i}
@@ -260,7 +260,7 @@ function FeedRow({ item }: { item: FeedItem }) {
               className="group flex items-baseline gap-2 text-sm"
             >
               <span className="mt-0.5 text-faint">·</span>
-              <span className="min-w-0 flex-1 truncate text-zinc-300 transition-colors group-hover:text-[#c8a45d]">
+              <span className="min-w-0 flex-1 truncate text-muted transition-colors group-hover:text-[#c8a45d]">
                 {h.headline}
               </span>
               <span className="shrink-0 text-[11px] text-faint">

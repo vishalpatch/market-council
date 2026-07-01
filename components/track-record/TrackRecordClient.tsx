@@ -107,7 +107,7 @@ export default function TrackRecordClient() {
   }
   if (rows.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-[#ece6d9]/[0.14] bg-[#ece6d9]/[0.02] p-12 text-center">
+      <div className="rounded-2xl border border-dashed border-[var(--edge-2)] bg-[var(--surface)] p-12 text-center">
         <h2 className="mb-3 font-serif text-2xl font-light">No theses tracked yet</h2>
         <p className="mx-auto mb-8 max-w-md text-pretty leading-relaxed text-muted">
           Every time you save a committee analysis with a ticker in it, we snapshot the
@@ -153,7 +153,7 @@ export default function TrackRecordClient() {
           return (
             <div
               key={r.id}
-              className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl"
+              className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl"
             >
               <div className="mb-3 flex flex-wrap items-center gap-3">
                 <span className="font-mono text-base font-bold text-paper">{r.ticker}</span>
@@ -176,7 +176,7 @@ export default function TrackRecordClient() {
               </div>
 
               {r.committee_analyses?.thesis && (
-                <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-zinc-300">
+                <p className="mb-4 line-clamp-2 text-sm leading-relaxed text-muted">
                   {r.committee_analyses.thesis}
                 </p>
               )}

@@ -129,7 +129,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
       <div>
         {/* Input */}
         <form onSubmit={handleSubmit} className="mb-8">
-          <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-2 backdrop-blur-xl">
+          <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-2 backdrop-blur-xl">
             <textarea
               value={input}
               onChange={(e) => setInput(e.target.value)}
@@ -141,10 +141,10 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               }}
               rows={3}
               placeholder='Enter a ticker (e.g. NVDA) or a thesis (e.g. "I think Apple is overvalued because of China risk")…'
-              className="w-full resize-none bg-transparent px-4 py-3 text-sm text-zinc-50 placeholder-zinc-600 focus:outline-none"
+              className="w-full resize-none bg-transparent px-4 py-3 text-sm text-paper placeholder-faint focus:outline-none"
             />
             <div className="flex items-center justify-between px-2 pb-1">
-              <span className="text-[11px] text-zinc-600">
+              <span className="text-[11px] text-faint">
                 Enter to convene · Shift+Enter for a new line
               </span>
               <button
@@ -169,11 +169,11 @@ export default function CommitteeClient({ userId }: { userId: string }) {
         {result && !loading && (
           <div className="space-y-6">
             {/* Thesis */}
-            <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
-              <p className="mb-1 text-xs uppercase tracking-wider text-zinc-500">
+            <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
+              <p className="mb-1 text-xs uppercase tracking-wider text-muted">
                 Thesis under review
               </p>
-              <p className="text-zinc-200">{result.thesisSummary}</p>
+              <p className="text-paper">{result.thesisSummary}</p>
             </div>
 
             {/* Chairman — the headline verdict, shown first */}
@@ -181,7 +181,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
 
             {/* Personas */}
             <div>
-              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
+              <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">
                 The Committee
               </h3>
               <div className="grid gap-4 md:grid-cols-2">
@@ -196,7 +196,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <button
                 onClick={handleSave}
                 disabled={saving || saved}
-                className="rounded-xl border border-[#ece6d9]/[0.12] bg-[#ece6d9]/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-[#ece6d9]/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+                className="rounded-xl border border-[var(--edge)] bg-[var(--surface-2)] px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-[var(--edge-2)] disabled:cursor-not-allowed disabled:opacity-50"
               >
                 {saved ? "✓ Saved" : saving ? "Saving…" : "Save Analysis"}
               </button>
@@ -205,7 +205,7 @@ export default function CommitteeClient({ userId }: { userId: string }) {
                 <span className="text-xs text-[#cb7e68]">{historyError}</span>
               )}
             </div>
-            <p className="text-[11px] text-zinc-600">
+            <p className="text-[11px] text-faint">
               For educational and informational purposes only — not financial advice.
             </p>
           </div>
@@ -214,11 +214,11 @@ export default function CommitteeClient({ userId }: { userId: string }) {
 
       {/* History sidebar */}
       <aside>
-        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-zinc-500">
+        <h3 className="mb-4 text-sm font-semibold uppercase tracking-wider text-muted">
           Past Analyses
         </h3>
         {history.length === 0 ? (
-          <p className="text-sm text-zinc-600">
+          <p className="text-sm text-faint">
             No saved analyses yet. Convene a committee and save the verdict.
           </p>
         ) : (
@@ -227,16 +227,16 @@ export default function CommitteeClient({ userId }: { userId: string }) {
               <button
                 key={a.id}
                 onClick={() => openSaved(a)}
-                className="block w-full rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-3 text-left backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
+                className="block w-full rounded-xl border border-[var(--edge)] bg-[var(--surface)] p-3 text-left backdrop-blur-xl transition-colors hover:border-[var(--edge-2)]"
               >
                 <div className="mb-1 flex items-center justify-between gap-2">
                   <VerdictBadge verdict={a.result.chairman.verdict} size="sm" />
-                  <span className="font-mono text-xs text-zinc-500">
+                  <span className="font-mono text-xs text-muted">
                     {a.result.chairman.overallScore}/100
                   </span>
                 </div>
-                <p className="line-clamp-2 text-xs text-zinc-300">{a.thesis}</p>
-                <p className="mt-1 text-[10px] text-zinc-600">
+                <p className="line-clamp-2 text-xs text-muted">{a.thesis}</p>
+                <p className="mt-1 text-[10px] text-faint">
                   {new Date(a.created_at).toLocaleString()}
                 </p>
               </button>
@@ -258,17 +258,17 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
         : "#a1a1aa";
   return (
     <div
-      className="rounded-2xl border bg-[#ece6d9]/[0.02] p-6 backdrop-blur-xl"
+      className="rounded-2xl border bg-[var(--surface)] p-6 backdrop-blur-xl"
       style={{ borderColor: `${accent}40` }}
     >
       <div className="mb-4 flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[#ece6d9]/[0.04] text-xl">
+          <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-[var(--surface-2)] text-xl">
             ⚖️
           </div>
           <div>
-            <h3 className="font-semibold text-zinc-50">The Chairman</h3>
-            <p className="text-xs text-zinc-500">Final Synthesis</p>
+            <h3 className="font-semibold text-paper">The Chairman</h3>
+            <p className="text-xs text-muted">Final Synthesis</p>
           </div>
         </div>
         <VerdictBadge verdict={chairman.verdict} />
@@ -276,13 +276,13 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
 
       {/* Score */}
       <div className="mb-4">
-        <div className="mb-1 flex items-center justify-between text-xs text-zinc-500">
+        <div className="mb-1 flex items-center justify-between text-xs text-muted">
           <span>Overall Conviction</span>
           <span className="font-mono" style={{ color: accent }}>
             {chairman.overallScore}/100
           </span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--surface-3)]">
           <div
             className="h-full rounded-full transition-all"
             style={{ width: `${chairman.overallScore}%`, backgroundColor: accent }}
@@ -290,10 +290,10 @@ function ChairmanCard({ result }: { result: CommitteeResult }) {
         </div>
       </div>
 
-      <p className="mb-3 text-sm leading-relaxed text-zinc-300">{chairman.summary}</p>
+      <p className="mb-3 text-sm leading-relaxed text-muted">{chairman.summary}</p>
 
-      <div className="rounded-xl border border-[#ece6d9]/[0.08] bg-black/30 p-4">
-        <p className="mb-1 text-[11px] uppercase tracking-wider text-zinc-500">
+      <div className="rounded-xl border border-[var(--edge)] bg-black/30 p-4">
+        <p className="mb-1 text-[11px] uppercase tracking-wider text-muted">
           Recommendation
         </p>
         <p className="font-medium" style={{ color: accent }}>
@@ -327,7 +327,7 @@ function ExportPdfButton({
     <button
       onClick={handleExport}
       disabled={exporting}
-      className="flex items-center gap-2 rounded-xl border border-[#ece6d9]/[0.12] bg-[#ece6d9]/[0.04] px-5 py-2.5 text-sm font-semibold text-zinc-100 transition-colors hover:border-[#ece6d9]/[0.25] disabled:cursor-not-allowed disabled:opacity-50"
+      className="flex items-center gap-2 rounded-xl border border-[var(--edge)] bg-[var(--surface-2)] px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:border-[var(--edge-2)] disabled:cursor-not-allowed disabled:opacity-50"
     >
       {exporting ? (
         <>
@@ -361,19 +361,19 @@ function ConveningState() {
     "Macro Economist",
   ];
   return (
-    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-10 text-center backdrop-blur-xl">
+    <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-10 text-center backdrop-blur-xl">
       <div className="mx-auto mb-5 flex h-12 w-12 items-center justify-center">
         <Spinner size="md" />
       </div>
-      <p className="mb-1 font-medium text-zinc-200">Convening the committee…</p>
-      <p className="text-sm text-zinc-500">
+      <p className="mb-1 font-medium text-paper">Convening the committee…</p>
+      <p className="text-sm text-muted">
         Five analysts are debating your thesis.
       </p>
       <div className="mt-5 flex flex-wrap justify-center gap-2">
         {members.map((m, i) => (
           <span
             key={m}
-            className="animate-pulse rounded-full border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-3 py-1 text-xs text-zinc-400"
+            className="animate-pulse rounded-full border border-[var(--edge)] bg-[var(--surface)] px-3 py-1 text-xs text-muted"
             style={{ animationDelay: `${i * 150}ms` }}
           >
             {m}

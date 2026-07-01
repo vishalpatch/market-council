@@ -18,9 +18,9 @@ interface JournalEntry {
 const STATUSES: Status[] = ["Watching", "Entered", "Exited"];
 
 const STATUS_STYLES: Record<Status, string> = {
-  Watching: "border-zinc-600/50 bg-zinc-500/10 text-zinc-300",
+  Watching: "border-hairline-strong bg-zinc-500/10 text-muted",
   Entered:  "border-[#c8a45d]/40 bg-[#c8a45d]/10 text-[#c8a45d]",
-  Exited:   "border-zinc-600/40 bg-zinc-700/20 text-zinc-500 line-through",
+  Exited:   "border-hairline-strong bg-zinc-700/20 text-muted line-through",
 };
 
 const OUTCOMES: Outcome[] = ["win", "loss", "neutral"];
@@ -32,7 +32,7 @@ const OUTCOME_LABEL: Record<Outcome, string> = {
 const OUTCOME_STYLES: Record<Outcome, string> = {
   win: "border-[#7ba890]/50 bg-[#7ba890]/[0.12] text-[#7ba890]",
   loss: "border-[#cb7e68]/50 bg-[#cb7e68]/[0.12] text-[#cb7e68]",
-  neutral: "border-zinc-600/50 bg-zinc-500/10 text-zinc-300",
+  neutral: "border-hairline-strong bg-zinc-500/10 text-muted",
 };
 
 export default function JournalClient({ userId }: { userId: string }) {
@@ -115,16 +115,16 @@ export default function JournalClient({ userId }: { userId: string }) {
       {!showForm ? (
         <button
           onClick={() => setShowForm(true)}
-          className="mb-8 rounded-xl border border-dashed border-zinc-700 px-5 py-3 text-sm font-medium text-zinc-400 transition-colors hover:border-zinc-500 hover:text-zinc-200"
+          className="mb-8 rounded-xl border border-dashed border-hairline-strong px-5 py-3 text-sm font-medium text-muted transition-colors hover:border-hairline-strong hover:text-paper"
         >
           + New Entry
         </button>
       ) : (
         <form
           onSubmit={handleSubmit}
-          className="mb-8 rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl"
+          className="mb-8 rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl"
         >
-          <h3 className="mb-4 text-sm font-semibold text-zinc-300">New Journal Entry</h3>
+          <h3 className="mb-4 text-sm font-semibold text-muted">New Journal Entry</h3>
           <div className="mb-3 flex flex-wrap gap-3">
             <input
               value={ticker}
@@ -132,12 +132,12 @@ export default function JournalClient({ userId }: { userId: string }) {
               placeholder="Ticker (e.g. TSLA)"
               maxLength={10}
               required
-              className="w-36 rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-2.5 font-mono text-sm text-zinc-50 placeholder-zinc-600 focus:border-[#ece6d9]/[0.2] focus:outline-none"
+              className="w-36 rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-2.5 font-mono text-sm text-paper placeholder-faint focus:border-[var(--edge-2)] focus:outline-none"
             />
             <select
               value={status}
               onChange={(e) => setStatus(e.target.value as Status)}
-              className="rounded-xl border border-[#ece6d9]/[0.08] bg-zinc-900 px-4 py-2.5 text-sm text-zinc-200 focus:border-[#ece6d9]/[0.2] focus:outline-none"
+              className="rounded-xl border border-[var(--edge)] bg-ink-raised px-4 py-2.5 text-sm text-paper focus:border-[var(--edge-2)] focus:outline-none"
             >
               {STATUSES.map((s) => (
                 <option key={s} value={s}>{s}</option>
@@ -150,7 +150,7 @@ export default function JournalClient({ userId }: { userId: string }) {
             placeholder="Write your thesis or reasoning…"
             rows={4}
             required
-            className="mb-3 w-full resize-none rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-3 text-sm text-zinc-50 placeholder-zinc-600 focus:border-[#ece6d9]/[0.2] focus:outline-none"
+            className="mb-3 w-full resize-none rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-3 text-sm text-paper placeholder-faint focus:border-[var(--edge-2)] focus:outline-none"
           />
           {formError && <p className="mb-3 text-xs text-[#cb7e68]">{formError}</p>}
           <div className="flex items-center gap-3">
@@ -164,7 +164,7 @@ export default function JournalClient({ userId }: { userId: string }) {
             <button
               type="button"
               onClick={() => { setShowForm(false); setFormError(""); }}
-              className="text-sm text-zinc-500 hover:text-zinc-300"
+              className="text-sm text-muted hover:text-muted"
             >
               Cancel
             </button>
@@ -174,7 +174,7 @@ export default function JournalClient({ userId }: { userId: string }) {
 
       {/* Entry list */}
       {entries.length === 0 ? (
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm text-faint">
           No journal entries yet. Log your first investment idea above.
         </p>
       ) : (
@@ -182,10 +182,10 @@ export default function JournalClient({ userId }: { userId: string }) {
           {entries.map((entry) => (
             <div
               key={entry.id}
-              className="group rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
+              className="group rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl transition-colors hover:border-[var(--edge-2)]"
             >
               <div className="mb-3 flex flex-wrap items-center gap-3">
-                <span className="font-mono text-base font-bold text-zinc-50">
+                <span className="font-mono text-base font-bold text-paper">
                   {entry.ticker}
                 </span>
                 <button
@@ -195,7 +195,7 @@ export default function JournalClient({ userId }: { userId: string }) {
                 >
                   {entry.status}
                 </button>
-                <span className="ml-auto text-xs text-zinc-600">
+                <span className="ml-auto text-xs text-faint">
                   {new Date(entry.created_at).toLocaleDateString("en-US", {
                     month: "short",
                     day: "numeric",
@@ -205,16 +205,16 @@ export default function JournalClient({ userId }: { userId: string }) {
                 <button
                   onClick={() => handleDelete(entry.id)}
                   aria-label="Delete entry"
-                  className="text-zinc-600 opacity-0 transition-opacity hover:text-[#cb7e68] group-hover:opacity-100"
+                  className="text-faint opacity-0 transition-opacity hover:text-[#cb7e68] group-hover:opacity-100"
                 >
                   ✕
                 </button>
               </div>
-              <p className="text-sm leading-relaxed text-zinc-300">{entry.thesis}</p>
+              <p className="text-sm leading-relaxed text-muted">{entry.thesis}</p>
 
               {entry.status === "Exited" && (
-                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[#ece6d9]/[0.06] pt-3">
-                  <span className="text-[11px] uppercase tracking-wider text-zinc-500">
+                <div className="mt-3 flex flex-wrap items-center gap-2 border-t border-[var(--edge)] pt-3">
+                  <span className="text-[11px] uppercase tracking-wider text-muted">
                     Outcome
                   </span>
                   {OUTCOMES.map((o) => (
@@ -224,7 +224,7 @@ export default function JournalClient({ userId }: { userId: string }) {
                       className={`rounded-full border px-3 py-0.5 text-xs font-semibold transition-colors ${
                         entry.outcome === o
                           ? OUTCOME_STYLES[o]
-                          : "border-zinc-700 text-zinc-500 hover:text-zinc-300"
+                          : "border-hairline-strong text-muted hover:text-muted"
                       }`}
                     >
                       {OUTCOME_LABEL[o]}

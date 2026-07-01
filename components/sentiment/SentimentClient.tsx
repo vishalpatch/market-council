@@ -62,7 +62,7 @@ export default function SentimentClient() {
           onChange={(e) => setInput(e.target.value.toUpperCase())}
           placeholder="Enter a ticker — AAPL, NVDA, TSLA…"
           maxLength={10}
-          className="flex-1 rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-3 font-mono text-sm tracking-wide text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none"
+          className="flex-1 rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-3 font-mono text-sm tracking-wide text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none"
         />
         <button
           type="submit"
@@ -80,11 +80,11 @@ export default function SentimentClient() {
       )}
 
       {loading && (
-        <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-12 text-center backdrop-blur-xl">
+        <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-12 text-center backdrop-blur-xl">
           <div className="mx-auto mb-5 flex justify-center">
             <Spinner size="md" />
           </div>
-          <p className="font-medium text-zinc-200">Reading the tape…</p>
+          <p className="font-medium text-paper">Reading the tape…</p>
           <p className="mt-1 text-sm text-muted">
             Pulling recent headlines and gauging sentiment.
           </p>
@@ -126,7 +126,7 @@ function SentimentGauge({ analysis }: { analysis: Analysis }) {
 
   return (
     <div
-      className="rounded-2xl border bg-[#ece6d9]/[0.02] p-6 backdrop-blur-xl"
+      className="rounded-2xl border bg-[var(--surface)] p-6 backdrop-blur-xl"
       style={{ borderColor: `${accent}40` }}
     >
       <div className="mb-6 flex flex-wrap items-center justify-between gap-3">
@@ -135,7 +135,7 @@ function SentimentGauge({ analysis }: { analysis: Analysis }) {
             <h2 className="font-serif text-3xl font-light tracking-editorial">
               {analysis.companyName}
             </h2>
-            <span className="rounded-md bg-[#ece6d9]/[0.06] px-2 py-0.5 font-mono text-xs text-muted">
+            <span className="rounded-md bg-[var(--surface-3)] px-2 py-0.5 font-mono text-xs text-muted">
               {analysis.ticker}
             </span>
           </div>
@@ -154,7 +154,7 @@ function SentimentGauge({ analysis }: { analysis: Analysis }) {
             {sentiment.intensity}/10
           </span>
         </div>
-        <div className="h-2 w-full overflow-hidden rounded-full bg-[#ece6d9]/[0.06]">
+        <div className="h-2 w-full overflow-hidden rounded-full bg-[var(--surface-3)]">
           <div
             className="h-full rounded-full transition-all"
             style={{ width: `${pct}%`, backgroundColor: accent }}
@@ -162,7 +162,7 @@ function SentimentGauge({ analysis }: { analysis: Analysis }) {
         </div>
       </div>
 
-      <p className="leading-relaxed text-zinc-300">{sentiment.explanation}</p>
+      <p className="leading-relaxed text-muted">{sentiment.explanation}</p>
     </div>
   );
 }

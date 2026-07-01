@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { signOut } from "@/app/auth/actions";
+import ThemeToggle from "./ThemeToggle";
 
 export type NavKey =
   | "dashboard"
@@ -249,7 +250,7 @@ export default function Sidebar({
   isAdmin?: boolean;
 }) {
   return (
-    <aside className="group fixed left-0 top-0 z-50 flex h-screen w-[68px] flex-col overflow-y-auto border-r border-hairline bg-ink/95 px-3 py-5 backdrop-blur-xl transition-[width] duration-300 ease-out hover:w-60">
+    <aside className="group fixed left-0 top-0 z-50 hidden h-screen w-[68px] flex-col overflow-y-auto border-r border-hairline bg-ink/95 px-3 py-5 backdrop-blur-xl transition-[width] duration-300 ease-out hover:w-60 md:flex">
       {/* Logo */}
       <Link href="/dashboard" className="mb-6 flex h-10 items-center gap-3 rounded-xl px-3 text-gold">
         <span className="flex h-6 w-6 shrink-0 items-center justify-center">
@@ -285,8 +286,13 @@ export default function Sidebar({
         )}
       </nav>
 
+      {/* Theme toggle */}
+      <div className="mt-3 border-t border-hairline/60 pt-3">
+        <ThemeToggle />
+      </div>
+
       {/* Sign out */}
-      <form action={signOut} className="mt-3 border-t border-hairline/60 pt-3">
+      <form action={signOut} className="mt-1">
         <button
           type="submit"
           className="flex h-10 w-full items-center gap-4 rounded-xl px-3 text-muted transition-colors hover:bg-paper/[0.04] hover:text-down"

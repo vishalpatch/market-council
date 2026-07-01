@@ -109,12 +109,12 @@ export default function WatchlistSection({ userId }: { userId: string }) {
           onChange={(e) => setInput(e.target.value.toUpperCase())}
           placeholder="Add ticker (e.g. AAPL)"
           maxLength={10}
-          className="flex-1 rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-2.5 text-sm text-zinc-50 placeholder-zinc-600 focus:border-[#ece6d9]/[0.2] focus:outline-none"
+          className="flex-1 rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-2.5 text-sm text-paper placeholder-faint focus:border-[var(--edge-2)] focus:outline-none"
         />
         <button
           type="submit"
           disabled={adding || !input.trim()}
-          className="rounded-xl bg-[#ece6d9]/[0.06] px-5 py-2.5 text-sm font-semibold text-zinc-200 transition-colors hover:bg-[#ece6d9]/[0.1] disabled:cursor-not-allowed disabled:opacity-40"
+          className="rounded-xl bg-[var(--surface-3)] px-5 py-2.5 text-sm font-semibold text-paper transition-colors hover:bg-[var(--surface-3)] disabled:cursor-not-allowed disabled:opacity-40"
         >
           {adding ? "Adding…" : "Add"}
         </button>
@@ -123,7 +123,7 @@ export default function WatchlistSection({ userId }: { userId: string }) {
       {addError && <p className="mb-3 text-xs text-[#cb7e68]">{addError}</p>}
 
       {items.length === 0 ? (
-        <p className="text-sm text-zinc-600">
+        <p className="text-sm text-faint">
           No tickers yet. Add one above to start tracking.
         </p>
       ) : (
@@ -137,30 +137,30 @@ export default function WatchlistSection({ userId }: { userId: string }) {
             return (
               <div
                 key={item.id}
-                className="group relative rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-4 backdrop-blur-xl transition-colors hover:border-[#ece6d9]/[0.16]"
+                className="group relative rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-4 backdrop-blur-xl transition-colors hover:border-[var(--edge-2)]"
               >
                 <button
                   onClick={() => handleRemove(item.id, item.ticker)}
-                  className="absolute right-3 top-3 text-zinc-600 opacity-0 transition-opacity hover:text-[#cb7e68] group-hover:opacity-100"
+                  className="absolute right-3 top-3 text-faint opacity-0 transition-opacity hover:text-[#cb7e68] group-hover:opacity-100"
                   aria-label="Remove"
                 >
                   ✕
                 </button>
 
-                <span className="mb-1 block font-mono text-sm font-bold text-zinc-50">
+                <span className="mb-1 block font-mono text-sm font-bold text-paper">
                   {item.ticker}
                 </span>
 
                 {isLoading ? (
                   <div className="space-y-1.5">
-                    <div className="h-3 w-28 animate-pulse rounded bg-[#ece6d9]/[0.06]" />
-                    <div className="h-5 w-16 animate-pulse rounded bg-[#ece6d9]/[0.06]" />
+                    <div className="h-3 w-28 animate-pulse rounded bg-[var(--surface-3)]" />
+                    <div className="h-5 w-16 animate-pulse rounded bg-[var(--surface-3)]" />
                   </div>
                 ) : data ? (
                   <>
-                    <p className="mb-2 truncate text-xs text-zinc-500">{data.name}</p>
+                    <p className="mb-2 truncate text-xs text-muted">{data.name}</p>
                     <div className="flex items-end justify-between">
-                      <span className="font-mono text-lg font-semibold text-zinc-50">
+                      <span className="font-mono text-lg font-semibold text-paper">
                         {formatPrice(data.price)}
                       </span>
                       <span
@@ -173,7 +173,7 @@ export default function WatchlistSection({ userId }: { userId: string }) {
                     </div>
                   </>
                 ) : (
-                  <p className="text-xs text-zinc-600">Data unavailable</p>
+                  <p className="text-xs text-faint">Data unavailable</p>
                 )}
               </div>
             );

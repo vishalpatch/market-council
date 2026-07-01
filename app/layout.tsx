@@ -34,10 +34,17 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en" className="dark">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${fraunces.variable} ${inter.variable} ${geistMono.variable} bg-ink text-paper font-sans antialiased`}
       >
+        {/* Apply the saved theme before paint to avoid a flash. Default is dark. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){try{if(localStorage.getItem('mc_theme')==='light'){document.documentElement.setAttribute('data-theme','light');}}catch(e){}})();",
+          }}
+        />
         {children}
       </body>
     </html>

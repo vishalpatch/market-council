@@ -34,9 +34,9 @@ function ChartTooltip({ active, payload, currency }: TooltipProps & { currency: 
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.08] bg-black/80 px-3 py-2 backdrop-blur-xl">
-      <p className="mb-0.5 text-xs text-zinc-400">{p.fullLabel}</p>
-      <p className="font-mono text-sm font-semibold text-zinc-100">
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 backdrop-blur-xl">
+      <p className="mb-0.5 text-xs text-muted">{p.fullLabel}</p>
+      <p className="font-mono text-sm font-semibold text-paper">
         {formatPrice(p.close, currency)}
       </p>
     </div>
@@ -68,10 +68,10 @@ export default function PriceChart({
   const domain = [Math.min(...lows) * 0.99, Math.max(...highs) * 1.01];
 
   return (
-    <div className="rounded-2xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] p-5 backdrop-blur-xl">
+    <div className="rounded-2xl border border-[var(--edge)] bg-[var(--surface)] p-5 backdrop-blur-xl">
       {/* Toggles */}
       <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
-        <div className="flex gap-1 rounded-lg border border-[#ece6d9]/[0.08] bg-black/30 p-1">
+        <div className="flex gap-1 rounded-lg border border-[var(--edge)] bg-black/30 p-1">
           {CHART_TYPES.map((c) => (
             <button
               key={c.key}
@@ -79,7 +79,7 @@ export default function PriceChart({
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                 type === c.key
                   ? "bg-[#c8a45d] text-black"
-                  : "text-zinc-400 hover:text-zinc-100"
+                  : "text-muted hover:text-paper"
               }`}
             >
               {c.label}
@@ -87,15 +87,15 @@ export default function PriceChart({
           ))}
         </div>
 
-        <div className="flex gap-1 rounded-lg border border-[#ece6d9]/[0.08] bg-black/30 p-1">
+        <div className="flex gap-1 rounded-lg border border-[var(--edge)] bg-black/30 p-1">
           {TIME_RANGES.map((r) => (
             <button
               key={r}
               onClick={() => setRange(r)}
               className={`rounded-md px-3 py-1.5 text-xs font-medium transition-all ${
                 range === r
-                  ? "bg-[#ece6d9]/10 text-zinc-100"
-                  : "text-zinc-400 hover:text-zinc-100"
+                  ? "bg-[#ece6d9]/10 text-paper"
+                  : "text-muted hover:text-paper"
               }`}
             >
               {r}
@@ -183,7 +183,7 @@ export default function PriceChart({
         )}
       </div>
 
-      <p className="mt-3 text-center text-[11px] text-zinc-600">
+      <p className="mt-3 text-center text-[11px] text-faint">
         Chart data is simulated for demonstration · anchored to the live price
       </p>
     </div>

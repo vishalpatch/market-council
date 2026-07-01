@@ -61,7 +61,7 @@ interface Results {
 }
 
 const inputCls =
-  "rounded-xl border border-[#ece6d9]/[0.08] bg-[#ece6d9]/[0.02] px-4 py-2.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
+  "rounded-xl border border-[var(--edge)] bg-[var(--surface)] px-4 py-2.5 text-sm text-paper placeholder-faint transition-colors focus:border-gold/50 focus:outline-none";
 
 export default function StressTestClient({ userId }: { userId: string }) {
   const [rows, setRows] = useState<Row[]>([
@@ -265,7 +265,7 @@ export default function StressTestClient({ userId }: { userId: string }) {
               <button
                 key={p.id}
                 onClick={() => loadPortfolio(p)}
-                className="block w-full rounded-xl border border-hairline bg-[#ece6d9]/[0.02] p-3 text-left transition-colors hover:border-gold/40"
+                className="block w-full rounded-xl border border-hairline bg-[var(--surface)] p-3 text-left transition-colors hover:border-gold/40"
               >
                 <p className="truncate text-sm font-medium text-paper">{p.name}</p>
                 <p className="mt-0.5 font-mono text-[11px] text-faint">
@@ -511,8 +511,8 @@ function CrisisTooltip({ active, payload }: CrisisTooltipProps) {
   if (!active || !payload?.length) return null;
   const p = payload[0].payload;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.1] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
-      <p className="mb-0.5 text-zinc-400">{p.full}</p>
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
+      <p className="mb-0.5 text-muted">{p.full}</p>
       <p
         className="font-mono font-semibold"
         style={{ color: p.drawdown >= 0 ? DOWN : UP }}
@@ -531,8 +531,8 @@ interface PieTooltipProps {
 function PieTooltip({ active, payload }: PieTooltipProps) {
   if (!active || !payload?.length) return null;
   return (
-    <div className="rounded-lg border border-[#ece6d9]/[0.1] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
-      <span className="text-zinc-300">{payload[0].name}</span>{" "}
+    <div className="rounded-lg border border-[var(--edge)] bg-black/80 px-3 py-2 text-xs backdrop-blur-xl">
+      <span className="text-muted">{payload[0].name}</span>{" "}
       <span className="font-mono text-[#c8a45d]">{payload[0].value}%</span>
     </div>
   );
