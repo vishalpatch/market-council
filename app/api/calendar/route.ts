@@ -42,10 +42,16 @@ export async function GET(req: Request) {
     const today = new Date();
     const todayStr = today.toISOString().slice(0, 10);
 
-    let from = url.searchParams.get("from") || todayStr;
-    let to =
-      url.searchParams.get("to") ||
-      new Date(today.getTime() + 7 * DAY).toISOString().slice(0, 10);
+    // Only accept strict YYYY-MM-DD; anything else falls back to a safe default,
+    // so nothing user-controlled is interpolated into the Finnhub URL.
+    const isoDate = (v: string | null, fallback: string) =>
+      v && /^\d{4}-\d{2}-\d{2}$/.test(v) && !Number.isNaN(Date.parse(v)) ? v : fallback;
+
+    let from = isoDate(url.searchParams.get("from"), todayStr);
+    let to = isoDate(
+      url.searchParams.get("to"),
+      new Date(today.getTime() + 7 * DAY).toISOString().slice(0, 10)
+    );
     if (from > to) [from, to] = [to, from];
     // Bound the range so a single request can't pull an unbounded window.
     const maxTo = new Date(new Date(`${from}T00:00:00`).getTime() + MAX_RANGE_DAYS * DAY)

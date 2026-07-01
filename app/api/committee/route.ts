@@ -1,22 +1,29 @@
 import { NextResponse } from "next/server";
 import { runCommittee } from "@/lib/committee";
+import { getSessionUser } from "@/lib/auth";
+import { sanitizeText } from "@/lib/sanitize";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const input = body?.input;
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    }
 
-    if (!input || typeof input !== "string" || !input.trim()) {
+    const body = await req.json();
+    const input = sanitizeText(body?.input, 4000);
+
+    if (!input) {
       return NextResponse.json(
         { error: "Please provide a ticker symbol or an investment thesis." },
         { status: 400 }
       );
     }
 
-    const result = await runCommittee(input.trim());
+    const result = await runCommittee(input);
     return NextResponse.json(result);
   } catch (err) {
     console.error("[committee] error:", err);

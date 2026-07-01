@@ -1,23 +1,25 @@
 import { NextResponse } from "next/server";
 import { getCompanyNews, getCompanyProfile } from "@/lib/finnhub";
 import { analyzeSentiment } from "@/lib/sentiment";
+import { getSessionUser } from "@/lib/auth";
+import { sanitizeTicker } from "@/lib/sanitize";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const raw = body?.ticker;
-
-    if (!raw || typeof raw !== "string" || !raw.trim()) {
-      return NextResponse.json(
-        { error: "Please enter a ticker symbol." },
-        { status: 400 }
-      );
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
     }
 
-    const ticker = raw.trim().toUpperCase();
+    const body = await req.json();
+    const ticker = sanitizeTicker(body?.ticker);
+
+    if (!ticker) {
+      return NextResponse.json({ error: "Please enter a ticker symbol." }, { status: 400 });
+    }
 
     const [news, profile] = await Promise.all([
       getCompanyNews(ticker),

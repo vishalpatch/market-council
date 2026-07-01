@@ -1,30 +1,32 @@
 import { NextResponse } from "next/server";
 import { buildBriefing } from "@/lib/briefing";
+import { getSessionUser } from "@/lib/auth";
+import { sanitizeTicker, sanitizeText, sanitizeNumber } from "@/lib/sanitize";
 
 export const runtime = "nodejs";
 export const maxDuration = 60;
 
 // Plumbing for AI pre-earnings briefings. The UI button is disabled until
-// Anthropic credits are available; this route follows the committee/sentiment
-// pattern and will work once a funded ANTHROPIC_API_KEY is configured.
+// Anthropic credits are available; this follows the committee/sentiment pattern.
 export async function POST(req: Request) {
   try {
-    const body = await req.json();
-    const symbol = body?.symbol;
+    const user = await getSessionUser();
+    if (!user) {
+      return NextResponse.json({ error: "Not authenticated." }, { status: 401 });
+    }
 
-    if (!symbol || typeof symbol !== "string" || !symbol.trim()) {
-      return NextResponse.json(
-        { error: "A ticker symbol is required." },
-        { status: 400 }
-      );
+    const body = await req.json();
+    const symbol = sanitizeTicker(body?.symbol);
+
+    if (!symbol) {
+      return NextResponse.json({ error: "A ticker symbol is required." }, { status: 400 });
     }
 
     const briefing = await buildBriefing({
-      symbol: symbol.trim().toUpperCase(),
-      companyName:
-        typeof body?.companyName === "string" ? body.companyName : symbol,
-      date: typeof body?.date === "string" ? body.date : "",
-      epsEstimate: typeof body?.epsEstimate === "number" ? body.epsEstimate : null,
+      symbol,
+      companyName: sanitizeText(body?.companyName, 120) || symbol,
+      date: sanitizeText(body?.date, 40),
+      epsEstimate: sanitizeNumber(body?.epsEstimate, -1e6, 1e6),
     });
 
     return NextResponse.json({ briefing });
