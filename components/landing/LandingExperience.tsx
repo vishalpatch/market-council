@@ -1,42 +1,7 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
-import dynamic from "next/dynamic";
-import {
-  motion,
-  useScroll,
-  useMotionValueEvent,
-  useReducedMotion,
-} from "framer-motion";
-
-const ConsensusScene = dynamic(() => import("./ConsensusScene"), {
-  ssr: false,
-  loading: () => null,
-});
-
-function webglSupported() {
-  try {
-    const canvas = document.createElement("canvas");
-    return !!(
-      window.WebGLRenderingContext &&
-      (canvas.getContext("webgl") || canvas.getContext("experimental-webgl"))
-    );
-  } catch {
-    return false;
-  }
-}
-
-/** Static aurora fallback when WebGL is unavailable or motion is reduced. */
-function AuroraFallback() {
-  return (
-    <div className="pointer-events-none fixed inset-0 z-0 overflow-hidden">
-      <div className="absolute left-1/2 top-1/3 h-[60vh] w-[60vh] -translate-x-1/2 -translate-y-1/2 rounded-full bg-[radial-gradient(circle,_rgba(200,164,93,0.22),_transparent_60%)] blur-3xl" />
-      <div className="absolute left-1/4 top-2/3 h-[40vh] w-[40vh] rounded-full bg-[radial-gradient(circle,_rgba(123,168,144,0.14),_transparent_60%)] blur-3xl" />
-      <div className="absolute right-1/4 top-1/4 h-[36vh] w-[36vh] rounded-full bg-[radial-gradient(circle,_rgba(217,189,131,0.12),_transparent_60%)] blur-3xl" />
-    </div>
-  );
-}
+import { motion } from "framer-motion";
 
 function Reveal({
   children,
@@ -94,45 +59,8 @@ const STEPS = [
 ];
 
 export default function LandingExperience() {
-  const [mode, setMode] = useState<"loading" | "3d" | "fallback">("loading");
-  const progressRef = useRef(0);
-  const reduceMotion = useReducedMotion();
-  const { scrollYProgress } = useScroll();
-
-  useMotionValueEvent(scrollYProgress, "change", (v) => {
-    progressRef.current = v;
-  });
-
-  useEffect(() => {
-    function evaluate() {
-      const supported = webglSupported();
-      // Below ~1024px there are no real side gutters (large headline +
-      // full-width mobile buttons), so the ribbons can't clear the text.
-      const wideEnough = window.innerWidth >= 1024;
-      setMode(reduceMotion || !supported || !wideEnough ? "fallback" : "3d");
-    }
-    evaluate();
-    window.addEventListener("resize", evaluate);
-    return () => window.removeEventListener("resize", evaluate);
-  }, [reduceMotion]);
-
   return (
     <div className="relative">
-      {/* Background layer */}
-      {mode === "fallback" && <AuroraFallback />}
-      {mode === "3d" && (
-        <div className="fixed inset-0 z-0">
-          <ConsensusScene progressRef={progressRef} />
-        </div>
-      )}
-
-      {/* Legibility scrim — sits above the canvas, below the content */}
-      {mode !== "loading" && (
-        <div className="pointer-events-none fixed inset-0 z-0 bg-[radial-gradient(ellipse_60%_45%_at_50%_42%,rgba(16,14,11,0.72),rgba(16,14,11,0.3)_55%,transparent_75%)]" />
-      )}
-
-      {/* Foreground content */}
-      <div className="relative z-10">
       {/* Hero */}
       <section className="relative flex min-h-screen flex-col items-center justify-center px-6 text-center">
         <Reveal>
@@ -173,7 +101,6 @@ export default function LandingExperience() {
             </Link>
           </div>
         </Reveal>
-
       </section>
 
       {/* The Council */}
@@ -248,7 +175,6 @@ export default function LandingExperience() {
       <footer className="relative border-t border-hairline py-10 text-center text-sm text-faint">
         <p>&copy; {new Date().getFullYear()} Market Council. All rights reserved.</p>
       </footer>
-      </div>
     </div>
   );
 }
