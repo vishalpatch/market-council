@@ -113,11 +113,7 @@ export default function DevilsAdvocateClient({ userId }: { userId: string }) {
 
   return (
     <div>
-      <p className="mb-8 rounded-xl border border-hairline bg-[#ece6d9]/[0.02] px-4 py-3 text-xs text-muted">
-        Powered by Claude — requires an <span className="text-paper">ANTHROPIC_API_KEY</span>{" "}
-        with available credits. Without it, the debate can&apos;t run and you&apos;ll see an
-        error below.
-      </p>
+      <p className="mb-8 text-xs text-muted">Powered by Claude</p>
 
       {phase === "setup" && (
         <form onSubmit={startDebate} className="space-y-4">
